@@ -80,7 +80,6 @@ export default defineConfig({
       '/api': {
         target: apiUrl, // Your backend API URL
         changeOrigin: true,
-        // rewrite: (path) => path.replace(/^\/api/, ''),
         configure: (proxy) => {
           // Log the request being forwarded
           proxy.on('proxyReq', (_proxyReq, req) => {
