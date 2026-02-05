@@ -8,6 +8,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import type { PickerValue } from '@mui/x-date-pickers/internals';
 import ClearIcon from '@mui/icons-material/Clear';
+import Grid from '@mui/material/Grid';
+
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -23,11 +25,11 @@ const MenuProps = {
 const WijzigOpkomst = () => {
     const navigate = useNavigate();
     const { id } = useParams();
-    const opkomstId = id && parseInt(id)
+    const opkomstId = id && parseInt(id);
     const { apiFetch, leiding, verkenners } = useApplication();
     const [opkomst, setOpkomst] = useState<Opkomst>();
-    const [selectedOpDate, setSelectedOpDate] = useState<Dayjs | null>(null)
-    const [selectedTotDate, setSelectedTotDate] = useState<Dayjs | null>(null)
+    const [selectedOpDate, setSelectedOpDate] = useState<Dayjs | null>(null);
+    const [selectedTotDate, setSelectedTotDate] = useState<Dayjs | null>(null);
 
     useEffect(() => {
         const getActiveOpkomst = async () => {
@@ -36,15 +38,15 @@ const WijzigOpkomst = () => {
                 if (response.status === 200) {
                     setOpkomst(response.data);
                     setSelectedOpDate(response.data.Op ? dayjs(response.data.Op) : null);
-                    setSelectedTotDate(response.data.Tot ? dayjs(response.data.Tot) : null)
+                    setSelectedTotDate(response.data.Tot ? dayjs(response.data.Tot) : null);
                 }
             }
-        }
-        getActiveOpkomst()
-    }, [opkomstId, apiFetch])
+        };
+        getActiveOpkomst();
+    }, [opkomstId, apiFetch]);
 
     if (!opkomst || leiding.length === 0 || verkenners.length === 0) {
-        return <></>
+        return <></>;
     }
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -56,7 +58,7 @@ const WijzigOpkomst = () => {
                         [name]: name === 'Op' || name === 'Tot' ? new Date(value) : value,
                     };
                 }
-                return
+                return;
             });
         }
 
@@ -66,7 +68,7 @@ const WijzigOpkomst = () => {
         if (opkomstId) {
             try {
                 await apiFetch(`/api/opkomsten/${opkomstId}`, "PUT", JSON.stringify(opkomst));
-                navigate(-1)
+                navigate(-1);
             } catch (error) {
                 console.error('Fout bij opslaan:', error);
             }
@@ -82,11 +84,11 @@ const WijzigOpkomst = () => {
                         Op: value?.toDate(),
                     };
                 }
-                return
+                return;
             });
             setSelectedOpDate(value);
         }
-    }
+    };
 
     const handleTotDateChange = (value: PickerValue) => {
         if (value) {
@@ -97,11 +99,11 @@ const WijzigOpkomst = () => {
                         Tot: value?.toDate(),
                     };
                 }
-                return
+                return;
             });
             setSelectedTotDate(value);
         }
-    }
+    };
     const clearOpDate = () => {
         setOpkomst((prevOpkomst) => {
             if (prevOpkomst) {
@@ -110,10 +112,10 @@ const WijzigOpkomst = () => {
                     Op: undefined,
                 };
             }
-            return
+            return;
         });
-        setSelectedOpDate(null)
-    }
+        setSelectedOpDate(null);
+    };
     const clearTotDate = () => {
         setOpkomst((prevOpkomst) => {
             if (prevOpkomst) {
@@ -122,10 +124,10 @@ const WijzigOpkomst = () => {
                     Tot: undefined,
                 };
             }
-            return
+            return;
         });
-        setSelectedTotDate(null)
-    }
+        setSelectedTotDate(null);
+    };
 
     const handleSvdDChange = (event: SelectChangeEvent<string>) => {
         const {
@@ -141,7 +143,7 @@ const WijzigOpkomst = () => {
                             StuurmanVanDeDag: selectedLeiding,
                         };
                     }
-                    return
+                    return;
                 });
             }
         }
@@ -161,11 +163,11 @@ const WijzigOpkomst = () => {
                             [name]: selectedLeiding,
                         };
                     }
-                    return
+                    return;
                 });
             }
         }
-    }
+    };
 
     const handleSelectVerkennerChange = (event: SelectChangeEvent<string[]>): void => {
         const {
@@ -181,222 +183,251 @@ const WijzigOpkomst = () => {
                             [name]: selectedVerkenner,
                         };
                     }
-                    return
+                    return;
                 });
             }
         }
-    }
+    };
 
     return (
         <Box sx={{ p: 3, maxWidth: 600, mx: 'auto' }}>
             <Typography variant="h5">Opkomst Wijzigen</Typography>
-            <FormControl sx={{ m: 1, width: 600 }}>
-                <DatePicker
-                    format='LL'
-                    value={selectedOpDate}
-                    onChange={handleOpDateChange}
-                    slots={{
-                        clearIcon: ClearIcon,
-                    }}
-                    slotProps={{
-                        field: { clearable: true },
-                        clearIcon: {
-                            onClick: clearOpDate,
-                        },
-                    }}
-                />
-            </FormControl>
-            <FormControl sx={{ m: 1, width: 600 }}>
-                <DatePicker
-                    label="Tot"
-                    format='LL'
-                    value={selectedTotDate}
-                    onChange={handleTotDateChange}
-                    slots={{
-                        clearIcon: ClearIcon,
-                    }}
-                    slotProps={{
-                        field: { clearable: true },
-                        clearIcon: {
-                            onClick: clearTotDate,
-                        },
-                    }}
-                />
 
-            </FormControl>
-            <FormControl sx={{ m: 1, width: 600 }}>
-                <TextField
-                    label="Omschrijving"
-                    name="Omschrijving"
-                    value={opkomst.Omschrijving}
-                    onChange={handleChange}
-                    fullWidth
-                    margin="normal"
-                />
-            </FormControl>
-            <FormControl sx={{ m: 1, width: 600 }}>
-            <TextField
-                label="Opmerkingen"
-                name="Opmerkingen"
-                value={opkomst.Opmerkingen}
-                onChange={handleChange}
-                fullWidth
-                margin="normal"
-            />
-            </FormControl>
+            <Grid container spacing={2}>
+                {/* Date Picker: Van */}
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <FormControl fullWidth>
+                        <DatePicker
+                            format='LL'
+                            value={selectedOpDate}
+                            onChange={handleOpDateChange}
+                            slots={{ clearIcon: ClearIcon }}
+                            slotProps={{
+                                field: { clearable: true },
+                                clearIcon: { onClick: clearOpDate },
+                            }}
+                        />
+                    </FormControl>
+                </Grid>
 
-            <FormControl sx={{ m: 1, width: 600 }}>
-                <InputLabel id="multi-select-leiding-label">Stuurman van de dag</InputLabel>
-                <Select
-                    label="Stuurman van de dag"
-                    value={opkomst.StuurmanVanDeDag.Naam}
-                    renderValue={(selected) => selected}
-                    onChange={handleSvdDChange}
-                    input={<OutlinedInput label="Selecteer namen" />}
-                    MenuProps={MenuProps}
-                >
-                    {leiding.map((l) => (
-                        <MenuItem key={l.Naam} value={l.Naam} >
-                            {l.Naam}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-            <FormControl sx={{ m: 1, width: 600 }}>
-                <InputLabel id="multi-select-leiding-label">Leiding Aanwezig</InputLabel>
-                <Select
-                    labelId="multi-select-leiding-label"
-                    id="multi-select-leiding"
-                    multiple
-                    name="LeidingAanwezig"
-                    value={opkomst.LeidingAanwezig.map(l => l.Naam)}
-                    onChange={handleSelectLeidingChange}
-                    input={<OutlinedInput label="Selecteer leiding" />}
-                    renderValue={(selected) => (
-                        selected
-                            .map((id) => leiding.find(l => l.Naam === id)?.Naam)
-                            .join(', ')
-                    )}
-                    MenuProps={{
-                        PaperProps: {
-                            style: {
-                                maxHeight: 48 * 4.5 + 8,
-                                width: 250,
-                            },
-                        },
-                    }}
-                >
-                    {leiding.map((l) => (
-                        <MenuItem key={l.LeidingId} value={l.Naam}>
-                            <Checkbox checked={opkomst.LeidingAanwezig.some(a => a.Naam === l.Naam)} />
-                            <ListItemText primary={l.Naam} />
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-            <FormControl sx={{ m: 1, width: 600 }}>
-                <InputLabel id="multi-select-leiding-label">Leiding Afwezig</InputLabel>
-                <Select
-                    labelId="multi-select-leiding-label"
-                    id="multi-select-leiding"
-                    multiple
-                    name="LeidingAfwezig"
-                    value={opkomst.LeidingAfwezig.map(l => l.Naam)}
-                    onChange={handleSelectLeidingChange}
-                    input={<OutlinedInput label="Selecteer leiding" />}
-                    renderValue={(selected) => (
-                        selected
-                            .map((id) => leiding.find(l => l.Naam === id)?.Naam)
-                            .join(', ')
-                    )}
-                    MenuProps={{
-                        PaperProps: {
-                            style: {
-                                maxHeight: 48 * 4.5 + 8,
-                                width: 250,
-                            },
-                        },
-                    }}
-                >
-                    {leiding.map((l) => (
-                        <MenuItem key={l.LeidingId} value={l.Naam}>
-                            <Checkbox checked={opkomst.LeidingAfwezig.some(a => a.Naam === l.Naam)} />
-                            <ListItemText primary={l.Naam} />
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-            <FormControl sx={{ m: 1, width: 600 }}>
-                <InputLabel id="multi-select-leiding-label">Verkenner Afwezig</InputLabel>
-                <Select
-                    labelId="multi-select-leiding-label"
-                    id="multi-select-leiding"
-                    multiple
-                    name="VerkennerAfwezig"
-                    value={opkomst.VerkennerAfwezig.map(v => v.Naam)}
-                    onChange={handleSelectVerkennerChange}
-                    input={<OutlinedInput label="Selecteer Verkenner" />}
-                    renderValue={(selected) => (
-                        selected
-                            .map((id) => verkenners.find(v => v.Naam === id)?.Naam)
-                            .join(', ')
-                    )}
-                    MenuProps={{
-                        PaperProps: {
-                            style: {
-                                maxHeight: 48 * 4.5 + 8,
-                                width: 250,
-                            },
-                        },
-                    }}
-                >
-                    {verkenners.map((v) => (
-                        <MenuItem key={v.VerkennerId} value={v.Naam}>
-                            <Checkbox checked={opkomst.VerkennerAfwezig?.some(a => a.Naam === v.Naam)} />
-                            <ListItemText primary={v.Naam} />
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-                        <FormControl sx={{ m: 1, width: 600 }}>
-                <InputLabel id="multi-select-leiding-label">Eerder weg</InputLabel>
-                <Select
-                    labelId="multi-select-leiding-label"
-                    id="multi-select-leiding"
-                    multiple
-                    name="EerderWeg"
-                    value={opkomst.EerderWeg.map(v => v.Naam)}
-                    onChange={handleSelectVerkennerChange}
-                    input={<OutlinedInput label="Selecteer Verkenner" />}
-                    renderValue={(selected) => (
-                        selected
-                            .map((id) => verkenners.find(v => v.Naam === id)?.Naam)
-                            .join(', ')
-                    )}
-                    MenuProps={{
-                        PaperProps: {
-                            style: {
-                                maxHeight: 48 * 4.5 + 8,
-                                width: 250,
-                            },
-                        },
-                    }}
-                >
-                    {verkenners.map((v) => (
-                        <MenuItem key={v.VerkennerId} value={v.Naam}>
-                            <Checkbox checked={opkomst.EerderWeg?.some(a => a.Naam === v.Naam)} />
-                            <ListItemText primary={v.Naam} />
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-            {/* Voeg hier meer velden toe, zoals datumselectors, checkboxen voor aanwezigheid, etc. */}
-            <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
-                <Button variant="contained" color="primary" onClick={handleSubmit}>
-                    Opslaan
-                </Button>
-            </Box>
+                {/* Date Picker: Tot */}
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <FormControl fullWidth>
+                        <DatePicker
+                            label="Tot"
+                            format='LL'
+                            value={selectedTotDate}
+                            onChange={handleTotDateChange}
+                            slots={{ clearIcon: ClearIcon }}
+                            slotProps={{
+                                field: { clearable: true },
+                                clearIcon: { onClick: clearTotDate },
+                            }}
+                        />
+                    </FormControl>
+                </Grid>
+
+                {/* Omschrijving */}
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <FormControl fullWidth>
+                        <TextField
+                            label="Omschrijving"
+                            name="Omschrijving"
+                            value={opkomst.Omschrijving}
+                            onChange={handleChange}
+                            margin="normal"
+                        />
+                    </FormControl>
+                </Grid>
+
+                {/* Opmerkingen */}
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <FormControl fullWidth>
+                        <TextField
+                            label="Opmerkingen"
+                            name="Opmerkingen"
+                            value={opkomst.Opmerkingen}
+                            onChange={handleChange}
+                            margin="normal"
+                        />
+                    </FormControl>
+                </Grid>
+
+                {/* Stuurman van de dag */}
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <FormControl fullWidth>
+                        <InputLabel id="stuurman-label">Stuurman van de dag</InputLabel>
+                        <Select
+                            label="Stuurman van de dag"
+                            value={opkomst.StuurmanVanDeDag.Naam}
+                            renderValue={(selected) => selected}
+                            onChange={handleSvdDChange}
+                            input={<OutlinedInput label="Selecteer namen" />}
+                            MenuProps={MenuProps}
+                        >
+                            {leiding.map((l) => (
+                                <MenuItem key={l.Naam} value={l.Naam}>
+                                    {l.Naam}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+
+                {/* Leiding Aanwezig */}
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <FormControl fullWidth>
+                        <InputLabel id="leiding-aanwezig-label">Leiding Aanwezig</InputLabel>
+                        <Select
+                            labelId="leiding-aanwezig-label"
+                            id="leiding-aanwezig"
+                            multiple
+                            name="LeidingAanwezig"
+                            value={opkomst.LeidingAanwezig.map(l => l.Naam)}
+                            onChange={handleSelectLeidingChange}
+                            input={<OutlinedInput label="Selecteer leiding" />}
+                            renderValue={(selected) => (
+                                selected
+                                    .map((id) => leiding.find(l => l.Naam === id)?.Naam)
+                                    .join(', ')
+                            )}
+                            MenuProps={{
+                                PaperProps: {
+                                    style: {
+                                        maxHeight: 48 * 4.5 + 8,
+                                        width: 250,
+                                    },
+                                },
+                            }}
+                        >
+                            {leiding.map((l) => (
+                                <MenuItem key={l.LeidingId} value={l.Naam}>
+                                    <Checkbox checked={opkomst.LeidingAanwezig.some(a => a.Naam === l.Naam)} />
+                                    <ListItemText primary={l.Naam} />
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+
+                {/* Leiding Afwezig */}
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <FormControl fullWidth>
+                        <InputLabel id="leiding-afwezig-label">Leiding Afwezig</InputLabel>
+                        <Select
+                            labelId="leiding-afwezig-label"
+                            id="leiding-afwezig"
+                            multiple
+                            name="LeidingAfwezig"
+                            value={opkomst.LeidingAfwezig.map(l => l.Naam)}
+                            onChange={handleSelectLeidingChange}
+                            input={<OutlinedInput label="Selecteer leiding" />}
+                            renderValue={(selected) => (
+                                selected
+                                    .map((id) => leiding.find(l => l.Naam === id)?.Naam)
+                                    .join(', ')
+                            )}
+                            MenuProps={{
+                                PaperProps: {
+                                    style: {
+                                        maxHeight: 48 * 4.5 + 8,
+                                        width: 250,
+                                    },
+                                },
+                            }}
+                        >
+                            {leiding.map((l) => (
+                                <MenuItem key={l.LeidingId} value={l.Naam}>
+                                    <Checkbox checked={opkomst.LeidingAfwezig.some(a => a.Naam === l.Naam)} />
+                                    <ListItemText primary={l.Naam} />
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+
+                {/* Verkenner Afwezig */}
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <FormControl fullWidth>
+                        <InputLabel id="verkenner-afwezig-label">Verkenner Afwezig</InputLabel>
+                        <Select
+                            labelId="verkenner-afwezig-label"
+                            id="verkenner-afwezig"
+                            multiple
+                            name="VerkennerAfwezig"
+                            value={opkomst.VerkennerAfwezig.map(v => v.Naam)}
+                            onChange={handleSelectVerkennerChange}
+                            input={<OutlinedInput label="Selecteer Verkenner" />}
+                            renderValue={(selected) => (
+                                selected
+                                    .map((id) => verkenners.find(v => v.Naam === id)?.Naam)
+                                    .join(', ')
+                            )}
+                            MenuProps={{
+                                PaperProps: {
+                                    style: {
+                                        maxHeight: 48 * 4.5 + 8,
+                                        width: 250,
+                                    },
+                                },
+                            }}
+                        >
+                            {verkenners.map((v) => (
+                                <MenuItem key={v.VerkennerId} value={v.Naam}>
+                                    <Checkbox checked={opkomst.VerkennerAfwezig?.some(a => a.Naam === v.Naam)} />
+                                    <ListItemText primary={v.Naam} />
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+
+                {/* Eerder Weg */}
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <FormControl fullWidth>
+                        <InputLabel id="eerder-weg-label">Eerder weg</InputLabel>
+                        <Select
+                            labelId="eerder-weg-label"
+                            id="eerder-weg"
+                            multiple
+                            name="EerderWeg"
+                            value={opkomst.EerderWeg.map(v => v.Naam)}
+                            onChange={handleSelectVerkennerChange}
+                            input={<OutlinedInput label="Selecteer Verkenner" />}
+                            renderValue={(selected) => (
+                                selected
+                                    .map((id) => verkenners.find(v => v.Naam === id)?.Naam)
+                                    .join(', ')
+                            )}
+                            MenuProps={{
+                                PaperProps: {
+                                    style: {
+                                        maxHeight: 48 * 4.5 + 8,
+                                        width: 250,
+                                    },
+                                },
+                            }}
+                        >
+                            {verkenners.map((v) => (
+                                <MenuItem key={v.VerkennerId} value={v.Naam}>
+                                    <Checkbox checked={opkomst.EerderWeg?.some(a => a.Naam === v.Naam)} />
+                                    <ListItemText primary={v.Naam} />
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+
+                {/* Submit Button */}
+
+                <Grid size={{ xs: 12, sm: 6 }} justifyContent="center" display="flex">
+                    <Button variant="contained" color="primary" onClick={handleSubmit}>
+                        Opslaan
+                    </Button>
+                </Grid>
+            </Grid>
         </Box>
+
     );
 };
 
