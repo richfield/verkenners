@@ -1,5 +1,3 @@
-import React from 'react';
-
 const PrivacyPolicy = () => {
   return (
     <div style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', padding: '1em' }}>
