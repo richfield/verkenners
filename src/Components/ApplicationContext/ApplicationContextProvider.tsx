@@ -38,7 +38,8 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
       localStorage.setItem('refreshToken', tokenData.refresh_token); // Sla de refresh token op
       navigate("/", { replace: true });
     },
-    onError: () => {
+    onError: (err) => {
+      console.error(err);
       console.warn('Login Failed');
     },
     scope: 'https://www.googleapis.com/auth/spreadsheets',
@@ -60,7 +61,9 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
 
   const apiFetch = useCallback(async <T,>(url: string, method: 'GET' | 'POST' | 'DELETE' | 'PUT' = 'GET', body?: unknown, headers?: object): Promise<AxiosResponse<T, unknown>> => {
     if (!accessToken) {
-      throw new Error("not authenticated");
+      return {
+        status: 301
+      } as AxiosResponse<T>;
     }
 
     if (!await isTokenValid(accessToken)) {
