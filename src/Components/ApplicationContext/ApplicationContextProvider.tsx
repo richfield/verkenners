@@ -35,6 +35,7 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
 
       const tokenData = tokenResponse.data;
       setAccessToken(tokenData.access_token);
+      localStorage.setItem('accessToken', tokenData.access_token);
       localStorage.setItem('refreshToken', tokenData.refresh_token); // Sla de refresh token op
       navigate("/", { replace: true });
     },
@@ -136,13 +137,22 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
       const storedAccessToken = localStorage.getItem('accessToken');
       const storedRefreshToken = localStorage.getItem('refreshToken');
 
-      if (storedAccessToken && storedRefreshToken) {
+      if (storedRefreshToken) {
         const valid = await isTokenValid(storedAccessToken);
         if (!valid) {
           try {
-            const newAccessTokenResponse = await apiFetch<string>("/api/auth/refresh-token", "POST", { refreshToken: storedRefreshToken });
-            setAccessToken(newAccessTokenResponse.data);
-            localStorage.setItem('accessToken', newAccessTokenResponse.data);
+            const config = {
+              method: "POST",
+              url: "/api/auth/refresh-token",
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              data: { refreshToken: storedRefreshToken }
+            };
+
+            const newAccessTokenResponse = await axios(config);
+            setAccessToken(newAccessTokenResponse.data.accessToken);
+            localStorage.setItem('accessToken', newAccessTokenResponse.data.accessToken);
           } catch (error) {
             console.error('Fout bij vernieuwen van token:', error);
             logout();
