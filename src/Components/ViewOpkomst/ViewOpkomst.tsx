@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useApplication } from "../ApplicationContext/useApplication";
 import type { Opkomst } from '../../Types';
 import Grid from "@mui/material/Grid";
-import {  Card, CardActions, CardContent, CardHeader, IconButton, Typography } from "@mui/material";
+import { Card, CardActions, CardContent, CardHeader, IconButton, Typography } from "@mui/material";
 import { ArrowLeft, ArrowRight, Edit } from "@mui/icons-material";
 import dayjs from "dayjs";
 import BorderTitleBox from "../BorderTitleBox";
@@ -60,7 +60,7 @@ const ViewOpkomst = () => {
                 </IconButton>
             </Grid>
             <Grid>
-                <SaturdayOnlyCalendar onChange={calenderPicked}/>
+                <SaturdayOnlyCalendar onChange={calenderPicked} />
             </Grid>
             <Grid>
                 <IconButton onClick={goForward} aria-label="forward">
@@ -95,11 +95,20 @@ const ViewOpkomst = () => {
 
                         </Grid>
 
-                        <Grid>
+                        <Grid
+                            sx={
+                                {
+                                    paddingBottom: 1.5
+                                }
+                            }>
                             <BorderTitleBox title="Verkenners">
                                 <Typography variant="body2">Afwezig: {opkomst.VerkennerAfwezig.map(m => m.Naam).join(', ')}</Typography>
                                 <Typography variant="body2">Eerder weg: {opkomst.EerderWeg.map(m => m.Naam).join(', ')}</Typography>
                             </BorderTitleBox>
+                        </Grid>
+
+                        <Grid >
+                            <Typography variant="body2">{opkomst.Opmerkingen}</Typography>
 
                         </Grid>
                     </Grid>
