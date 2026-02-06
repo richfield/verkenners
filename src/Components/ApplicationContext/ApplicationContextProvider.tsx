@@ -137,7 +137,7 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
       const storedAccessToken = localStorage.getItem('accessToken');
       const storedRefreshToken = localStorage.getItem('refreshToken');
 
-      if (storedRefreshToken) {
+      if (storedRefreshToken && storedAccessToken) {
         const valid = await isTokenValid(storedAccessToken);
         if (!valid) {
           try {
