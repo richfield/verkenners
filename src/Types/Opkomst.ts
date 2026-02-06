@@ -1,5 +1,5 @@
-import type { Leiding } from "./Leiding";
-import type { Verkenner } from "./Verkenner";
+import { type Leiding } from "./Leiding";
+import { type Verkenner } from "./Verkenner";
 
 export type Opkomst = {
     OpkomstId: number,

@@ -10,6 +10,7 @@ import axios, { type AxiosResponse } from 'axios';
 import { isTokenValid } from '../../services/authService';
 import dayjs from 'dayjs';
 import 'dayjs/locale/nl';
+import type { User } from '../../Types/User';
 export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   dayjs.locale("nl");
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
 
   const [leiding, setLeiding] = useState<Leiding[]>([]);
   const [verkenners, setVerkenners] = useState<Verkenner[]>([]);
-
+  const [ user, setUser ] = useState<User>();
   const login = useGoogleLogin({
     flow: 'auth-code',
     onSuccess: async (codeResponse) => {
@@ -86,6 +87,19 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
     return await axios(config);
 
   }, [accessToken]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await apiFetch<User>('https://www.googleapis.com/oauth2/v3/userinfo');
+      console.log({result});
+      if (result.status === 200) {
+        setUser(result.data);
+      }
+
+    };
+    fetchData();
+  }, [apiFetch]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -167,7 +181,7 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
   }, [apiFetch]);
 
   return (
-    <ApplicationContext.Provider value={{ accessToken, login, logout, isAuthenticated, apiFetch, leiding, verkenners }}>
+    <ApplicationContext.Provider value={{ accessToken, login, logout, isAuthenticated, apiFetch, leiding, verkenners, user }}>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='nl'>
         {children}
       </LocalizationProvider>
