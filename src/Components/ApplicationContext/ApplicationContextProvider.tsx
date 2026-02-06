@@ -91,7 +91,6 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
   useEffect(() => {
     const fetchData = async () => {
       const result = await apiFetch<User>('https://www.googleapis.com/oauth2/v3/userinfo');
-      console.log({result});
       if (result.status === 200) {
         setUser(result.data);
       }
