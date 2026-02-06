@@ -8,6 +8,7 @@ import { ArrowLeft, ArrowRight, Edit } from "@mui/icons-material";
 import dayjs from "dayjs";
 import BorderTitleBox from "../BorderTitleBox";
 import SaturdayOnlyCalendar from "../SaturdayOnlyCalendar";
+import type { DateEntry } from "../DateEntry";
 
 const ViewOpkomst = () => {
     const navigate = useNavigate();
@@ -17,7 +18,7 @@ const ViewOpkomst = () => {
     const [opkomst, setOpkomst] = useState<Opkomst>();
     useEffect(() => {
         const getActiveOpkomst = async () => {
-            if (opkomstId) {
+            if (opkomstId && opkomstId !== opkomst?.OpkomstId) {
                 const response = await apiFetch<Opkomst>(`/api/opkomsten/${opkomstId}`);
                 if (response.status === 200) {
                     setOpkomst(response.data);
@@ -26,7 +27,7 @@ const ViewOpkomst = () => {
             }
         };
         getActiveOpkomst();
-    }, [opkomstId, apiFetch]);
+    }, [opkomstId, apiFetch, opkomst?.OpkomstId]);
 
     const goBack = () => {
         setOpkomstId(opkomstId - 1);
@@ -39,6 +40,12 @@ const ViewOpkomst = () => {
     if (!opkomst || leiding.length === 0 || verkenners.length === 0) {
         return <></>;
     }
+
+    const calenderPicked = (selected: DateEntry): void => {
+        if (selected?.OpkomstId && selected.OpkomstId !== opkomstId) {
+            setOpkomstId(selected.OpkomstId);
+        }
+    };
 
     return (<Grid>
         <Grid
@@ -53,7 +60,7 @@ const ViewOpkomst = () => {
                 </IconButton>
             </Grid>
             <Grid>
-                <SaturdayOnlyCalendar/>
+                <SaturdayOnlyCalendar onChange={calenderPicked}/>
             </Grid>
             <Grid>
                 <IconButton onClick={goForward} aria-label="forward">
