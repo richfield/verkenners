@@ -7,6 +7,7 @@ import WijzigOpkomst from '../Components/WijzigOpkomst/WijzigOpkomst';
 import TermsAndConditions from '../Components/TOS';
 import PrivacyPolicy from '../Components/PP';
 import ViewOpkomst from '../Components/ViewOpkomst/ViewOpkomst';
+import Home from '../Components/Home/Home';
 
 const AppRouter = () => {
   return (
@@ -19,7 +20,7 @@ const AppRouter = () => {
           <Route path='/pp' element={<PrivacyPolicy />} />
           <Route path="/opkomsten/:id" element={<ViewOpkomst />} />
           <Route path="/opkomsten/" element={<ViewOpkomst />} />
-          <Route path="/" element={<ViewOpkomst />} />
+          <Route path="/" element={<Home />} />
         </Routes>
       </Layout>
   );

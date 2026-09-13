@@ -4,7 +4,25 @@ const PrivacyPolicy = () => {
       <h1>Privacy Policy</h1>
 
       <p>
-        This privacy policy is applicable to the Verkenners app (hereinafter referred to as "Application") for mobile devices, which was developed by Richard ten Velde (hereinafter referred to as "Service Provider") as a Free service. This service is provided "AS IS".
+        This privacy policy explains how Verkenners, operated by Richard ten Velde, processes information when authorized users use the Verkenners attendance planning application.
+      </p>
+
+      <h2>What the application does</h2>
+      <p>
+        Verkenners is used by authorized leaders of a Zeeverkenners scouting group to manage attendance planning, dates, leadership assignments, and attendance notes. Users sign in with Google and use the application to read and update the group&apos;s shared Google Sheet.
+      </p>
+
+      <h2>Google data we access</h2>
+      <p>
+        With your authorization, Verkenners requests access to Google Sheets through the <code>https://www.googleapis.com/auth/spreadsheets</code> scope. This allows the application to read the attendance spreadsheet and write changes made through the application. The application does not access unrelated spreadsheets.
+      </p>
+      <p>
+        The application receives basic Google account information needed to identify the signed-in user, such as name, email address, and profile image when provided by Google. It does not use Google data for advertising, profiling, or sale to third parties.
+      </p>
+
+      <h2>How information is used</h2>
+      <p>
+        Information is used only to authenticate users, show the group&apos;s attendance planning, and save changes requested by authorized users. Google OAuth access tokens are sent to the Verkenners backend to make authorized Google Sheets requests.
       </p>
 
       <h2>What information does the Application obtain and how is it used?</h2>
@@ -33,7 +51,7 @@ const PrivacyPolicy = () => {
 
       <h3>Do third parties see and/or have access to information obtained by the Application?</h3>
       <p>
-        Only aggregated, anonymized data is periodically transmitted to external services to aid the Service Provider in improving the Application and their service. The Service Provider may share your information with third parties in the ways that are described in this privacy statement.
+        Verkenners does not sell or share Google user data with advertisers or data brokers. Data is stored in the group&apos;s Google Sheet and processed by the Verkenners application and its hosting provider only to operate the service. Access is limited to authorized users and service operators who need it to maintain the application.
       </p>
       <p>
         The Service Provider may disclose User Provided and Automatically Collected Information:
@@ -51,7 +69,7 @@ const PrivacyPolicy = () => {
 
       <h2>What is the data retention policy and how can you manage your information?</h2>
       <p>
-        The Service Provider will retain User Provided data for as long as you use the Application and for a reasonable time thereafter. The Service Provider will retain Automatically Collected information for up to 24 months and thereafter may store it in aggregate. If you'd like the Service Provider to delete User Provided Data that you have provided via the Application, please contact them at <a href="mailto:richard@zwolschezeeverkenners.nl">richard@zwolschezeeverkenners.nl</a> and they will respond in a reasonable time. Please note that some or all of the User Provided Data may be required in order for the Application to function properly.
+        OAuth tokens are retained only as long as needed to keep the user signed in and refresh the session. Spreadsheet records remain in the group&apos;s Google account until an authorized sheet owner removes them. You can revoke Verkenners&apos; Google access from your Google Account security settings. You may request deletion of application-held account information by contacting <a href="mailto:richard@zwolschezeeverkenners.nl">richard@zwolschezeeverkenners.nl</a>. Spreadsheet content must be deleted by an authorized owner in Google Sheets.
       </p>
 
       <h2>How does the Application address children's privacy?</h2>
