@@ -274,42 +274,6 @@ const WijzigOpkomst = () => {
                     </FormControl>
                 </Grid>
 
-                {/* Leiding Aanwezig */}
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <FormControl fullWidth>
-                        <InputLabel id="leiding-aanwezig-label">Leiding Aanwezig</InputLabel>
-                        <Select
-                            labelId="leiding-aanwezig-label"
-                            id="leiding-aanwezig"
-                            multiple
-                            name="LeidingAanwezig"
-                            value={opkomst.LeidingAanwezig.map(l => l.Naam)}
-                            onChange={handleSelectLeidingChange}
-                            input={<OutlinedInput label="Selecteer leiding" />}
-                            renderValue={(selected) => (
-                                selected
-                                    .map((id) => leiding.find(l => l.Naam === id)?.Naam)
-                                    .join(', ')
-                            )}
-                            MenuProps={{
-                                PaperProps: {
-                                    style: {
-                                        maxHeight: 48 * 4.5 + 8,
-                                        width: 250,
-                                    },
-                                },
-                            }}
-                        >
-                            {leiding.map((l) => (
-                                <MenuItem key={l.LeidingId} value={l.Naam}>
-                                    <Checkbox checked={opkomst.LeidingAanwezig.some(a => a.Naam === l.Naam)} />
-                                    <ListItemText primary={l.Naam} />
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
-
                 {/* Leiding Afwezig */}
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <FormControl fullWidth>

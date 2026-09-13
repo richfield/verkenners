@@ -89,7 +89,6 @@ const ViewOpkomst = () => {
                         }>
                             <BorderTitleBox title="Leiding">
                                 <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>SvdD: {opkomst.StuurmanVanDeDag?.Naam}</Typography>
-                                <Typography variant="body2">Aanwezig: {opkomst.LeidingAanwezig.map(m => m.Naam).join(', ')}</Typography>
                                 <Typography variant="body2">Afwezig: {opkomst.LeidingAfwezig.map(m => m.Naam).join(', ')}</Typography>
                             </BorderTitleBox>
 
