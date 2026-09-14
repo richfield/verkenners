@@ -1,7 +1,7 @@
 import { Box, Button, Link as MuiLink, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useApplication } from '../ApplicationContext/useApplication';
-import { ViewOpkomst } from '../ViewOpkomst/ViewOpkomst';
+import ViewOpkomst from '../ViewOpkomst/ViewOpkomst';
 
 const Home = () => {
   const { isAuthenticated } = useApplication();
