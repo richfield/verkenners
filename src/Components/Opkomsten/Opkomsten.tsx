@@ -33,7 +33,7 @@ const Opkomsten = () => {
                     <Table>
                         <TableHead>
                             <TableRow>
-                                {["", "Op", "Tot", "Omschrijving", "Opmerkingen", "SvdD", "Leiding Aanwezig", "Leiding Afwezig", "Afwezig", "Eerder weg"].map((header: string, index: number) => (
+                                {["", "Op", "Tot", "Omschrijving", "Opmerkingen", "SvdD", "Leiding Afwezig", "Afwezig", "Eerder weg"].map((header: string, index: number) => (
                                     <TableCell key={index}>{header}</TableCell>
                                 ))}
                             </TableRow>
@@ -52,7 +52,6 @@ const Opkomsten = () => {
                                         <TableCell>{opkomst.Omschrijving}</TableCell>
                                         <TableCell>{opkomst.Opmerkingen}</TableCell>
                                         <TableCell>{getNaam(opkomst.StuurmanVanDeDag)}</TableCell>
-                                        <TableCell>{getNamen(opkomst.LeidingAanwezig)}</TableCell>
                                         <TableCell>{getNamen(opkomst.LeidingAfwezig)}</TableCell>
                                         <TableCell>{getNamen(opkomst.VerkennerAfwezig)}</TableCell>
                                         <TableCell>{getNamen(opkomst.EerderWeg)}</TableCell>
