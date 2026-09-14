@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useApplication } from "../ApplicationContext/useApplication";
 import type { Opkomst } from '../../Types';
 import Grid from "@mui/material/Grid";
-import { Card, CardActions, CardContent, CardHeader, IconButton, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CardHeader, IconButton, Typography } from "@mui/material";
 import { ArrowLeft, ArrowRight, Edit } from "@mui/icons-material";
 import dayjs from "dayjs";
 import BorderTitleBox from "../BorderTitleBox";
@@ -103,6 +103,7 @@ const ViewOpkomst = () => {
                     </Grid>
                 </CardContent>
                 <CardActions>
+                    <Button onClick={() => navigate(`/opkomsten/${opkomstId}/incidenten`)}>{translate('incidentsAndTreats')}</Button>
                     <IconButton onClick={() => navigate(`/opkomsten/${opkomstId}/edit`)} aria-label={translate('editAttendance')}><Edit /></IconButton>
                 </CardActions>
             </Card>
