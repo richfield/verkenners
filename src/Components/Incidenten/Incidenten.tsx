@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Alert, Box, Button, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Typography } from '@mui/material';
+import { Alert, Box, Button, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Typography, type SelectChangeEvent } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useApplication } from '../ApplicationContext/useApplication';
 import type { IncidentType, Opkomst, Traktatie } from '../../Types';
@@ -9,7 +9,7 @@ const Incidenten = () => {
   const navigate = useNavigate();
   const { apiFetch, verkenners, translate } = useApplication();
   const [opkomst, setOpkomst] = useState<Opkomst>();
-  const [selectedScout, setSelectedScout] = useState('');
+  const [selectedScouts, setSelectedScouts] = useState<string[]>([]);
   const [incidentType, setIncidentType] = useState<IncidentType>('late');
   const [traktaties, setTraktaties] = useState<Traktatie[]>([]);
   const [message, setMessage] = useState('');
@@ -35,17 +35,17 @@ const Incidenten = () => {
   }, [apiFetch, id, loadTraktaties]);
 
   const recordIncident = async () => {
-    if (!selectedScout || !opkomst?.Op) {
+    if (selectedScouts.length === 0 || !opkomst?.Op) {
       return;
     }
     const response = await apiFetch('/api/opkomsten/incidents', 'POST', {
       date: new Date(opkomst.Op).toISOString(),
-      verkennerNaam: selectedScout,
+      verkennerNamen: selectedScouts,
       type: incidentType,
     });
     if (response.status === 201) {
       setMessage(translate('incidentSaved'));
-      setSelectedScout('');
+      setSelectedScouts([]);
       await loadTraktaties();
     }
   };
@@ -68,8 +68,19 @@ const Incidenten = () => {
         <Typography variant="h6" gutterBottom>{translate('recordIncident')}</Typography>
         <FormControl fullWidth sx={{ mb: 2 }}>
           <InputLabel>{translate('scout')}</InputLabel>
-          <Select value={selectedScout} label={translate('scout')} onChange={(event) => setSelectedScout(event.target.value)}>
-            {verkenners.map((scout) => <MenuItem key={scout.VerkennerId} value={scout.Naam}>{scout.Naam}</MenuItem>)}
+          <Select<string[]>
+            multiple
+            value={selectedScouts}
+            label={translate('scout')}
+            onChange={(event: SelectChangeEvent<string[]>) => setSelectedScouts(event.target.value as string[])}
+            renderValue={(selected: string[]) => selected.join(', ')}
+          >
+            {verkenners.map((scout) => (
+              <MenuItem key={scout.VerkennerId} value={scout.Naam}>
+                <Checkbox checked={selectedScouts.includes(scout.Naam)} />
+                {scout.Naam}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
         <FormControl fullWidth sx={{ mb: 2 }}>
@@ -79,7 +90,7 @@ const Incidenten = () => {
             <MenuItem value="uniform">{translate('forgotUniform')}</MenuItem>
           </Select>
         </FormControl>
-        <Button variant="contained" onClick={recordIncident} disabled={!selectedScout || !opkomst?.Op}>
+        <Button variant="contained" onClick={recordIncident} disabled={selectedScouts.length === 0 || !opkomst?.Op}>
           {translate('record')}
         </Button>
       </Box>
