@@ -3,8 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useApplication } from "../ApplicationContext/useApplication";
 import type { Opkomst } from '../../Types';
 import Grid from "@mui/material/Grid";
-import { Button, Card, CardActions, CardContent, CardHeader, IconButton, Typography } from "@mui/material";
-import { ArrowLeft, ArrowRight, Edit } from "@mui/icons-material";
+import { Card, CardActions, CardContent, CardHeader, IconButton, Typography } from "@mui/material";
+import { Add, ArrowLeft, ArrowRight, Edit } from "@mui/icons-material";
 import dayjs from "dayjs";
 import BorderTitleBox from "../BorderTitleBox";
 import SaturdayOnlyCalendar from "../SaturdayOnlyCalendar";
@@ -105,8 +105,12 @@ const ViewOpkomst = () => {
                     </Grid>
                 </CardContent>
                 <CardActions>
-                    <Button onClick={() => navigate(`/opkomsten/${opkomstId}/incidenten`)}>{translate('addIncident')}</Button>
-                    <IconButton onClick={() => navigate(`/opkomsten/${opkomstId}/edit`)} aria-label={translate('editAttendance')}><Edit /></IconButton>
+                    <IconButton onClick={() => navigate(`/opkomsten/${opkomstId}/edit`)} aria-label={translate('editAttendance')}>
+                        <Edit />
+                    </IconButton>
+                    <IconButton onClick={() => navigate(`/opkomsten/${opkomstId}/incidenten`)} aria-label={translate('addIncident')}>
+                        <Add />
+                    </IconButton>
                 </CardActions>
             </Card>
         </Grid>
