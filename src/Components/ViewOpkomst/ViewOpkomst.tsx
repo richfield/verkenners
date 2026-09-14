@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import BorderTitleBox from "../BorderTitleBox";
 import SaturdayOnlyCalendar from "../SaturdayOnlyCalendar";
 import type { DateEntry } from "../DateEntry";
+import TraktatieOverzicht from "../TraktatieOverzicht/TraktatieOverzicht";
 
 const ViewOpkomst = () => {
     const navigate = useNavigate();
@@ -100,6 +101,7 @@ const ViewOpkomst = () => {
                         <Grid>
                             <Typography variant="body2">{opkomst.Opmerkingen}</Typography>
                         </Grid>
+                        <TraktatieOverzicht />
                     </Grid>
                 </CardContent>
                 <CardActions>

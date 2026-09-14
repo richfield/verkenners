@@ -3,6 +3,7 @@ import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, Tab
 import dayjs from 'dayjs';
 import { useApplication } from '../ApplicationContext/useApplication';
 import type { UniformIncident } from '../../Types';
+import TraktatieOverzicht from '../TraktatieOverzicht/TraktatieOverzicht';
 
 const IncidentenOverzicht = () => {
   const { apiFetch, translate } = useApplication();
@@ -43,6 +44,7 @@ const IncidentenOverzicht = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <TraktatieOverzicht />
     </Box>
   );
 };
