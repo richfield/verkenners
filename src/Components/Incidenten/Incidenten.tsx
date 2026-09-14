@@ -57,7 +57,14 @@ const Incidenten = () => {
     }
   };
 
-  const dueTraktaties = traktaties.filter((item) => item.KerenOver === 0 && item.AantalKeerVergeten > 0 && !item.Getrakteerd);
+  const addTreatCycle = async (treat: Traktatie) => {
+    const response = await apiFetch('/api/opkomsten/traktaties', 'POST', { verkennerNaam: treat.VerkennerNaam });
+    if (response.status === 201) {
+      await loadTraktaties();
+    }
+  };
+
+  const dueTraktaties = traktaties.filter((item) => item.KerenOver <= 0 && item.AantalKeerVergeten > 0);
 
   return (
     <Box sx={{ p: 3, maxWidth: 720, mx: 'auto' }}>
@@ -88,11 +95,17 @@ const Incidenten = () => {
         <Typography variant="h6" gutterBottom>{translate('needsTreat')}</Typography>
         {dueTraktaties.length === 0 && <Typography>{translate('noTreats')}</Typography>}
         {dueTraktaties.map((treat) => (
-          <FormControlLabel
-            key={treat.RowNumber}
-            control={<Checkbox checked={treat.Getrakteerd} onChange={(event) => markDone(treat, event.target.checked)} />}
-            label={`${treat.VerkennerNaam} (${treat.AantalKeerVergeten} ${translate('times')})`}
-          />
+          <Box key={treat.RowNumber} sx={{ display: 'flex', alignItems: 'center' }}>
+            <FormControlLabel
+              control={<Checkbox checked={treat.Getrakteerd} onChange={(event) => markDone(treat, event.target.checked)} />}
+              label={`${treat.VerkennerNaam} (${treat.AantalKeerVergeten} ${translate('times')})`}
+            />
+            {treat.Getrakteerd && (
+              <Button size="small" onClick={() => addTreatCycle(treat)}>
+                {translate('newTreat')}
+              </Button>
+            )}
+          </Box>
         ))}
       </Box>
 

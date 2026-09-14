@@ -35,7 +35,9 @@ const IncidentenOverzicht = () => {
               <TableRow key={incident.RowNumber}>
                 <TableCell>{dayjs(incident.Datum).format('LL')}</TableCell>
                 <TableCell>{incident.VerkennerNaam}</TableCell>
-                <TableCell>{incident.Type === 'late' ? translate('late') : translate('forgotUniform')}</TableCell>
+                <TableCell>
+                  {incident.Type === 'late' ? translate('late') : incident.Type === 'uniform' ? translate('forgotUniform') : translate('uniformOrLate')}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
