@@ -16,7 +16,7 @@ interface SaturdayOnlyCalendarProps {
 function SaturdayOnlyCalendar(props: SaturdayOnlyCalendarProps) {
   const [open, setOpen] = useState(false);
   const [dateEntries, setDateEntries] = useState<DateEntry[]>();
-  const { apiFetch } = useApplication();
+  const { apiFetch, translate } = useApplication();
 
   // Function to check if a date is a Saturday
   const isEnabled = (date: Dayjs) => {
@@ -81,7 +81,7 @@ function SaturdayOnlyCalendar(props: SaturdayOnlyCalendarProps) {
 
   return (
     <div>
-      <IconButton onClick={() => setOpen(true)} aria-label="back">
+      <IconButton onClick={() => setOpen(true)} aria-label={translate('calendar')}>
         <CalendarIcon />
       </IconButton>
       <Dialog open={open} onClose={() => setOpen(false)}>

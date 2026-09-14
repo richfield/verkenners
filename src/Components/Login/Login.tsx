@@ -3,18 +3,18 @@ import { Typography, Button, Box } from '@mui/material';
 import { useApplication } from '../ApplicationContext/useApplication';
 
 const LoginPage = () => {
-  const { login } = useApplication();
+  const { login, translate } = useApplication();
 
   return (
     <Box sx={{ textAlign: 'center', mt: 4 }}>
-      <Typography variant="h4">Inloggen</Typography>
+      <Typography variant="h4">{translate('signIn')}</Typography>
       <Button
         variant="contained"
         color="primary"
         onClick={login}
         sx={{ mt: 2 }}
       >
-        Inloggen met Google
+        {translate('signInWithGoogle')}
       </Button>
     </Box>
   );

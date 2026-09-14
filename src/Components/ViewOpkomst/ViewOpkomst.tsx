@@ -14,8 +14,9 @@ const ViewOpkomst = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const [opkomstId, setOpkomstId] = useState(id ? parseInt(id) : -1);
-    const { apiFetch, leiding, verkenners } = useApplication();
+    const { apiFetch, leiding, verkenners, translate } = useApplication();
     const [opkomst, setOpkomst] = useState<Opkomst>();
+
     useEffect(() => {
         const getActiveOpkomst = async () => {
             if (opkomstId && opkomstId !== opkomst?.OpkomstId) {
@@ -55,7 +56,7 @@ const ViewOpkomst = () => {
             sx={{ padding: 2, backgroundColor: 'background.paper' }}
         >
             <Grid>
-                <IconButton onClick={goBack} aria-label="back">
+                <IconButton onClick={goBack} aria-label={translate('back')}>
                     <ArrowLeft />
                 </IconButton>
             </Grid>
@@ -63,7 +64,7 @@ const ViewOpkomst = () => {
                 <SaturdayOnlyCalendar onChange={calenderPicked} />
             </Grid>
             <Grid>
-                <IconButton onClick={goForward} aria-label="forward">
+                <IconButton onClick={goForward} aria-label={translate('forward')}>
                     <ArrowRight />
                 </IconButton>
             </Grid>
@@ -82,39 +83,27 @@ const ViewOpkomst = () => {
                 />
                 <CardContent>
                     <Grid>
-                        <Grid sx={
-                            {
-                                paddingBottom: 1.5
-                            }
-                        }>
-                            <BorderTitleBox title="Leiding">
-                                <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>SvdD: {opkomst.StuurmanVanDeDag?.Naam}</Typography>
-                                <Typography variant="body2">Afwezig: {opkomst.LeidingAfwezig.map(m => m.Naam).join(', ')}</Typography>
-                            </BorderTitleBox>
-
-                        </Grid>
-
-                        <Grid
-                            sx={
-                                {
-                                    paddingBottom: 1.5
-                                }
-                            }>
-                            <BorderTitleBox title="Verkenners">
-                                <Typography variant="body2">Afwezig: {opkomst.VerkennerAfwezig.map(m => m.Naam).join(', ')}</Typography>
-                                <Typography variant="body2">Eerder weg: {opkomst.EerderWeg.map(m => m.Naam).join(', ')}</Typography>
+                        <Grid sx={{ paddingBottom: 1.5 }}>
+                            <BorderTitleBox title={translate('leader')}>
+                                <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>{translate('leaderOfTheDay')}: {opkomst.StuurmanVanDeDag?.Naam}</Typography>
+                                <Typography variant="body2">{translate('absent')}: {opkomst.LeidingAfwezig.map(m => m.Naam).join(', ')}</Typography>
                             </BorderTitleBox>
                         </Grid>
 
-                        <Grid >
+                        <Grid sx={{ paddingBottom: 1.5 }}>
+                            <BorderTitleBox title={translate('explorers')}>
+                                <Typography variant="body2">{translate('absent')}: {opkomst.VerkennerAfwezig.map(m => m.Naam).join(', ')}</Typography>
+                                <Typography variant="body2">{translate('leaveEarly')}: {opkomst.EerderWeg.map(m => m.Naam).join(', ')}</Typography>
+                            </BorderTitleBox>
+                        </Grid>
+
+                        <Grid>
                             <Typography variant="body2">{opkomst.Opmerkingen}</Typography>
-
                         </Grid>
                     </Grid>
-
                 </CardContent>
                 <CardActions>
-                    <IconButton onClick={() => navigate(`/opkomsten/${opkomstId}/edit`)}><Edit /></IconButton>
+                    <IconButton onClick={() => navigate(`/opkomsten/${opkomstId}/edit`)} aria-label={translate('editAttendance')}><Edit /></IconButton>
                 </CardActions>
             </Card>
         </Grid>

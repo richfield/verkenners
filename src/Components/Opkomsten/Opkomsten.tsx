@@ -10,7 +10,7 @@ import dayjs from 'dayjs';
 
 const Opkomsten = () => {
     const navigate = useNavigate();
-    const { apiFetch } = useApplication();
+    const { apiFetch, translate } = useApplication();
     const [sheetData, setSheetData] = useState<Opkomst[]>([]);
 
     useEffect(() => {
@@ -33,7 +33,7 @@ const Opkomsten = () => {
                     <Table>
                         <TableHead>
                             <TableRow>
-                                {["", "Op", "Tot", "Omschrijving", "Opmerkingen", "SvdD", "Leiding Afwezig", "Afwezig", "Eerder weg"].map((header: string, index: number) => (
+                                {["", translate('from'), translate('to'), translate('description'), translate('remarks'), translate('leaderOfTheDay'), translate('absentLeaders'), translate('absentExplorers'), translate('leaveEarly')].map((header: string, index: number) => (
                                     <TableCell key={index}>{header}</TableCell>
                                 ))}
                             </TableRow>
@@ -43,7 +43,7 @@ const Opkomsten = () => {
                                 return (
                                     <TableRow key={rowIndex}>
                                         <TableCell>
-                                            <IconButton onClick={() => goToEdit(opkomst.OpkomstId)}>
+                                            <IconButton onClick={() => goToEdit(opkomst.OpkomstId)} aria-label={translate('editAttendance')}>
                                                 <Edit />
                                             </IconButton>
                                         </TableCell>

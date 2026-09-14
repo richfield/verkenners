@@ -18,7 +18,7 @@ import React from 'react';
 import { Menu as MenuIcon, Person } from '@mui/icons-material';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const { login, logout, user } = useApplication();
+  const { login, logout, user, language, setLanguage, translate } = useApplication();
 
   return (
     <>
@@ -30,17 +30,23 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               <PopupState variant="popover" popupId="demo-popup-menu">
                 {(popupState) => (
                   <React.Fragment>
-                    <IconButton {...bindTrigger(popupState)}>
+                    <IconButton {...bindTrigger(popupState)} aria-label={translate('menu')}>
                       <MenuIcon />
                     </IconButton>
                     <Menu {...bindMenu(popupState)}>
                       <MenuItem onClick={popupState.close} component={Link} to="/tos">
-                        Terms of Service
+                        {translate('termsOfService')}
                       </MenuItem>
                       <MenuItem onClick={popupState.close} component={Link} to="/pp">
-                        Privacy Policy
+                        {translate('privacyPolicy')}
                       </MenuItem>
-
+                      <MenuItem disabled>{translate('language')}</MenuItem>
+                      <MenuItem selected={language === 'en'} onClick={() => { setLanguage('en'); popupState.close(); }}>
+                        {translate('english')}
+                      </MenuItem>
+                      <MenuItem selected={language === 'nl'} onClick={() => { setLanguage('nl'); popupState.close(); }}>
+                        {translate('dutch')}
+                      </MenuItem>
                     </Menu>
 
                   </React.Fragment>
@@ -56,13 +62,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             </Box>
             <Box sx={{ display: 'flex', gap: 2 }}>
               <Button color="inherit" component={Link} to="/opkomsten/list">
-                Lijst
+                {translate('list')}
               </Button>
               {user && user.picture ? (
                 <IconButton color="inherit" onClick={logout}>
                   <Avatar
                     src={user.picture}
-                    alt="User Avatar"
+                    alt={translate('userAvatar')}
                     style={{ width: "40px", height: "40px", marginRight: "10px" }}
                   />
                 </IconButton>

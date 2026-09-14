@@ -26,7 +26,7 @@ const WijzigOpkomst = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const opkomstId = id && parseInt(id);
-    const { apiFetch, leiding, verkenners } = useApplication();
+    const { apiFetch, leiding, verkenners, translate } = useApplication();
     const [opkomst, setOpkomst] = useState<Opkomst>();
     const [selectedOpDate, setSelectedOpDate] = useState<Dayjs | null>(null);
     const [selectedTotDate, setSelectedTotDate] = useState<Dayjs | null>(null);
@@ -191,13 +191,14 @@ const WijzigOpkomst = () => {
 
     return (
         <Box sx={{ p: 3, maxWidth: 600, mx: 'auto' }}>
-            <Typography variant="h5">Opkomst Wijzigen</Typography>
+            <Typography variant="h5">{translate('editAttendance')}</Typography>
 
             <Grid container spacing={2}>
                 {/* Date Picker: Van */}
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <FormControl fullWidth>
-                        <DatePicker
+                            <DatePicker
+                            label={translate('from')}
                             format='LL'
                             value={selectedOpDate}
                             onChange={handleOpDateChange}
@@ -214,7 +215,7 @@ const WijzigOpkomst = () => {
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <FormControl fullWidth>
                         <DatePicker
-                            label="Tot"
+                            label={translate('to')}
                             format='LL'
                             value={selectedTotDate}
                             onChange={handleTotDateChange}
@@ -231,7 +232,7 @@ const WijzigOpkomst = () => {
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <FormControl fullWidth>
                         <TextField
-                            label="Omschrijving"
+                            label={translate('description')}
                             name="Omschrijving"
                             value={opkomst.Omschrijving}
                             onChange={handleChange}
@@ -244,7 +245,7 @@ const WijzigOpkomst = () => {
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <FormControl fullWidth>
                         <TextField
-                            label="Opmerkingen"
+                            label={translate('remarks')}
                             name="Opmerkingen"
                             value={opkomst.Opmerkingen}
                             onChange={handleChange}
@@ -256,13 +257,13 @@ const WijzigOpkomst = () => {
                 {/* Stuurman van de dag */}
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <FormControl fullWidth>
-                        <InputLabel id="stuurman-label">Stuurman van de dag</InputLabel>
+                        <InputLabel id="stuurman-label">{translate('leaderOfTheDay')}</InputLabel>
                         <Select
-                            label="Stuurman van de dag"
+                            label={translate('leaderOfTheDay')}
                             value={opkomst.StuurmanVanDeDag.Naam}
                             renderValue={(selected) => selected}
                             onChange={handleSvdDChange}
-                            input={<OutlinedInput label="Selecteer namen" />}
+                            input={<OutlinedInput label={translate('selectNames')} />}
                             MenuProps={MenuProps}
                         >
                             {leiding.map((l) => (
@@ -277,7 +278,7 @@ const WijzigOpkomst = () => {
                 {/* Leiding Afwezig */}
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <FormControl fullWidth>
-                        <InputLabel id="leiding-afwezig-label">Leiding Afwezig</InputLabel>
+                        <InputLabel id="leiding-afwezig-label">{translate('absentLeaders')}</InputLabel>
                         <Select
                             labelId="leiding-afwezig-label"
                             id="leiding-afwezig"
@@ -285,7 +286,7 @@ const WijzigOpkomst = () => {
                             name="LeidingAfwezig"
                             value={opkomst.LeidingAfwezig.map(l => l.Naam)}
                             onChange={handleSelectLeidingChange}
-                            input={<OutlinedInput label="Selecteer leiding" />}
+                            input={<OutlinedInput label={translate('selectLeaders')} />}
                             renderValue={(selected) => (
                                 selected
                                     .map((id) => leiding.find(l => l.Naam === id)?.Naam)
@@ -313,7 +314,7 @@ const WijzigOpkomst = () => {
                 {/* Verkenner Afwezig */}
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <FormControl fullWidth>
-                        <InputLabel id="verkenner-afwezig-label">Verkenner Afwezig</InputLabel>
+                        <InputLabel id="verkenner-afwezig-label">{translate('absentExplorers')}</InputLabel>
                         <Select
                             labelId="verkenner-afwezig-label"
                             id="verkenner-afwezig"
@@ -321,7 +322,7 @@ const WijzigOpkomst = () => {
                             name="VerkennerAfwezig"
                             value={opkomst.VerkennerAfwezig.map(v => v.Naam)}
                             onChange={handleSelectVerkennerChange}
-                            input={<OutlinedInput label="Selecteer Verkenner" />}
+                            input={<OutlinedInput label={translate('selectExplorers')} />}
                             renderValue={(selected) => (
                                 selected
                                     .map((id) => verkenners.find(v => v.Naam === id)?.Naam)
@@ -349,7 +350,7 @@ const WijzigOpkomst = () => {
                 {/* Eerder Weg */}
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <FormControl fullWidth>
-                        <InputLabel id="eerder-weg-label">Eerder weg</InputLabel>
+                        <InputLabel id="eerder-weg-label">{translate('leaveEarly')}</InputLabel>
                         <Select
                             labelId="eerder-weg-label"
                             id="eerder-weg"
@@ -357,7 +358,7 @@ const WijzigOpkomst = () => {
                             name="EerderWeg"
                             value={opkomst.EerderWeg.map(v => v.Naam)}
                             onChange={handleSelectVerkennerChange}
-                            input={<OutlinedInput label="Selecteer Verkenner" />}
+                            input={<OutlinedInput label={translate('selectExplorers')} />}
                             renderValue={(selected) => (
                                 selected
                                     .map((id) => verkenners.find(v => v.Naam === id)?.Naam)
@@ -386,7 +387,7 @@ const WijzigOpkomst = () => {
 
                 <Grid size={{ xs: 12, sm: 6 }} justifyContent="center" display="flex">
                     <Button variant="contained" color="primary" onClick={handleSubmit}>
-                        Opslaan
+                        {translate('save')}
                     </Button>
                 </Grid>
             </Grid>

@@ -1,6 +1,7 @@
 import type { AxiosResponse } from 'axios';
 import type { Leiding, Verkenner } from '../../Types';
 import type { User } from '../../Types/User';
+import type { Language, TranslationKey } from '../../i18n';
 
 
 export type ApplicationContextType = {
@@ -12,4 +13,7 @@ export type ApplicationContextType = {
   leiding: Leiding[];
   verkenners: Verkenner[];
   user: User|undefined;
+  language: Language;
+  setLanguage: (language: Language) => void;
+  translate: (key: TranslationKey) => string;
 };

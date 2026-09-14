@@ -1,0 +1,89 @@
+export type Language = 'en' | 'nl';
+
+export const supportedLanguages: Language[] = ['en', 'nl'];
+
+const translations = {
+  en: {
+    menu: 'Menu',
+    termsOfService: 'Terms of service',
+    privacyPolicy: 'Privacy policy',
+    list: 'List',
+    language: 'Language',
+    english: 'English',
+    dutch: 'Dutch',
+    userAvatar: 'User avatar',
+    back: 'Back',
+    forward: 'Forward',
+    calendar: 'Open calendar',
+    homeTitle: 'Verkenners',
+    homeSubtitle: 'Attendance planning for the Zeeverkenners scouting group',
+    homeDescription: "Verkenners helps authorized group leaders manage scouting attendance. Users sign in with Google to view and update the group's shared attendance spreadsheet, including planning dates, leadership assignments, and attendance notes.",
+    homePrivacy: 'The application only uses Google data to provide this attendance administration service. It does not sell personal information or use Google data for advertising.',
+    signIn: 'Sign in',
+    signInWithGoogle: 'Sign in with Google',
+    editAttendance: 'Edit attendance',
+    from: 'From',
+    to: 'To',
+    description: 'Description',
+    remarks: 'Remarks',
+    leaderOfTheDay: 'Leader of the day',
+    selectNames: 'Select names',
+    absentLeaders: 'Absent leaders',
+    selectLeaders: 'Select leaders',
+    absentExplorers: 'Absent explorers',
+    selectExplorers: 'Select explorers',
+    leaveEarly: 'Leave early',
+    save: 'Save',
+    leader: 'Leaders',
+    explorers: 'Explorers',
+    absent: 'Absent',
+  },
+  nl: {
+    menu: 'Menu',
+    termsOfService: 'Algemene voorwaarden',
+    privacyPolicy: 'Privacybeleid',
+    list: 'Lijst',
+    language: 'Taal',
+    english: 'Engels',
+    dutch: 'Nederlands',
+    userAvatar: 'Gebruikersavatar',
+    back: 'Terug',
+    forward: 'Vooruit',
+    calendar: 'Kalender openen',
+    homeTitle: 'Verkenners',
+    homeSubtitle: 'Aanwezigheidsplanning voor de Zeeverkennersgroep',
+    homeDescription: "Verkenners helpt geautoriseerde groepsleiders om de aanwezigheid bij scouting te beheren. Gebruikers loggen in met Google om het gedeelde aanwezigheidsbestand te bekijken en bij te werken, inclusief planningsdatums, leidingtoewijzingen en aanwezigheidsnotities.",
+    homePrivacy: 'De applicatie gebruikt Google-gegevens alleen voor deze aanwezigheidsadministratie. Persoonsgegevens worden niet verkocht en Google-gegevens worden niet gebruikt voor advertenties.',
+    signIn: 'Inloggen',
+    signInWithGoogle: 'Inloggen met Google',
+    editAttendance: 'Opkomst wijzigen',
+    from: 'Van',
+    to: 'Tot',
+    description: 'Omschrijving',
+    remarks: 'Opmerkingen',
+    leaderOfTheDay: 'Stuurman van de dag',
+    selectNames: 'Selecteer namen',
+    absentLeaders: 'Leiding afwezig',
+    selectLeaders: 'Selecteer leiding',
+    absentExplorers: 'Verkenners afwezig',
+    selectExplorers: 'Selecteer verkenners',
+    leaveEarly: 'Eerder weg',
+    save: 'Opslaan',
+    leader: 'Leiding',
+    explorers: 'Verkenners',
+    absent: 'Afwezig',
+  },
+} as const;
+
+export type TranslationKey = keyof typeof translations.en;
+
+export const getInitialLanguage = (): Language => {
+  const storedLanguage = localStorage.getItem('language');
+  if (storedLanguage === 'en' || storedLanguage === 'nl') {
+    return storedLanguage;
+  }
+
+  return navigator.language.toLowerCase().startsWith('nl') ? 'nl' : 'en';
+};
+
+export const getTranslations = (language: Language) => translations[language];

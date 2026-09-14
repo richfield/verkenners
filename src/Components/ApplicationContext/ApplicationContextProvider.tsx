@@ -11,8 +11,11 @@ import { isTokenValid } from '../../services/authService';
 import dayjs from 'dayjs';
 import 'dayjs/locale/nl';
 import type { User } from '../../Types/User';
+import { getInitialLanguage, getTranslations, type Language } from '../../i18n';
 export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  dayjs.locale("nl");
+  const [language, setLanguage] = useState<Language>(getInitialLanguage);
+  const translations = getTranslations(language);
+  dayjs.locale(language);
   const navigate = useNavigate();
 
   const [accessToken, setAccessToken] = useState<string | null>(localStorage.getItem('accessToken'));
@@ -54,6 +57,11 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
   };
 
   const isAuthenticated = !!accessToken;
+
+  const changeLanguage = (nextLanguage: Language) => {
+    setLanguage(nextLanguage);
+    localStorage.setItem('language', nextLanguage);
+  };
 
   useEffect(() => {
     if (accessToken) {
@@ -180,8 +188,8 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
   }, [apiFetch]);
 
   return (
-    <ApplicationContext.Provider value={{ accessToken, login, logout, isAuthenticated, apiFetch, leiding, verkenners, user }}>
-      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='nl'>
+    <ApplicationContext.Provider value={{ accessToken, login, logout, isAuthenticated, apiFetch, leiding, verkenners, user, language, setLanguage: changeLanguage, translate: (key) => translations[key] }}>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={language}>
         {children}
       </LocalizationProvider>
     </ApplicationContext.Provider>
