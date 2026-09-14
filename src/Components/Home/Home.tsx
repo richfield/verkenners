@@ -43,12 +43,7 @@ const Home = () => {
 
 
       {isAuthenticated && (
-        <Box sx={{ mt: 4 }}>
-          <Typography variant="h6" component="h3" gutterBottom>
-            Next Opkomst
-          </Typography>
           <ViewOpkomst />
-        </Box>
       )}
     </Box>
   );
