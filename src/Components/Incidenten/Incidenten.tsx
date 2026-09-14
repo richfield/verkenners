@@ -50,21 +50,14 @@ const Incidenten = () => {
     }
   };
 
-  const markDone = async (treat: Traktatie, done: boolean) => {
-    const response = await apiFetch(`/api/opkomsten/traktaties/${treat.RowNumber}`, 'PUT', { done });
+  const markDone = async (treat: Traktatie) => {
+    const response = await apiFetch(`/api/opkomsten/traktaties/${treat.RowNumber}`, 'PUT');
     if (response.status === 200) {
-      setTraktaties((current) => current.map((item) => item.RowNumber === treat.RowNumber ? { ...item, Getrakteerd: done } : item));
+      setTraktaties((current) => current.map((item) => item.RowNumber === treat.RowNumber ? { ...item, Getrakteerd: item.Getrakteerd + 1 } : item));
     }
   };
 
-  const addTreatCycle = async (treat: Traktatie) => {
-    const response = await apiFetch('/api/opkomsten/traktaties', 'POST', { verkennerNaam: treat.VerkennerNaam });
-    if (response.status === 201) {
-      await loadTraktaties();
-    }
-  };
-
-  const dueTraktaties = traktaties.filter((item) => item.KerenOver <= 0 && item.AantalKeerVergeten > 0);
+  const dueTraktaties = traktaties.filter((item) => Math.floor(item.AantalKeerVergeten / 3) > item.Getrakteerd);
 
   return (
     <Box sx={{ p: 3, maxWidth: 720, mx: 'auto' }}>
@@ -97,14 +90,9 @@ const Incidenten = () => {
         {dueTraktaties.map((treat) => (
           <Box key={treat.RowNumber} sx={{ display: 'flex', alignItems: 'center' }}>
             <FormControlLabel
-              control={<Checkbox checked={treat.Getrakteerd} onChange={(event) => markDone(treat, event.target.checked)} />}
-              label={`${treat.VerkennerNaam} (${treat.AantalKeerVergeten} ${translate('times')})`}
+              control={<Checkbox checked={false} onChange={() => markDone(treat)} />}
+              label={`${treat.VerkennerNaam} (${treat.AantalKeerVergeten} ${translate('times')}, ${treat.Getrakteerd} ${translate('treatsSupplied')})`}
             />
-            {treat.Getrakteerd && (
-              <Button size="small" onClick={() => addTreatCycle(treat)}>
-                {translate('newTreat')}
-              </Button>
-            )}
           </Box>
         ))}
       </Box>
