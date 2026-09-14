@@ -1,11 +1,7 @@
 import { Box, Button, Link as MuiLink, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { useApplication } from '../ApplicationContext/useApplication';
-import { ViewOpkomst } from '../ViewOpkomst/ViewOpkomst';
 
 const Home = () => {
-  const { isAuthenticated } = useApplication();
-
   return (
     <Box sx={{ maxWidth: 720, mx: 'auto', px: 3, py: 8 }}>
       <Typography variant="h3" component="h1" gutterBottom>
@@ -15,8 +11,7 @@ const Home = () => {
         Attendance planning for the Zeeverkenners scouting group
       </Typography>
       <Typography paragraph>
-
-        Verkenners helps authorized group leaders manage scouting attendance. Users sign in with Google to view and update the group's shared attendance spreadsheet, including planning dates, leadership assignments, and attendance notes.
+        Verkenners helps authorized group leaders manage scouting attendance. Users sign in with Google to view and update the group&apos;s shared attendance spreadsheet, including planning dates, leadership assignments, and attendance notes.
       </Typography>
       <Typography paragraph>
         The application only uses Google data to provide this attendance administration service. It does not sell personal information or use Google data for advertising.
@@ -32,16 +27,6 @@ const Home = () => {
           Terms of service
         </MuiLink>
       </Box>
-
-
-      {isAuthenticated && (
-        <Box sx={{ mt: 4 }}>
-          <Typography variant="h6" component="h3" gutterBottom>
-            Next Opkomst
-          </Typography>
-          <ViewOpkomst />
-        </Box>
-      )}
     </Box>
   );
 };
