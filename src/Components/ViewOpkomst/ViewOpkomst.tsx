@@ -103,7 +103,7 @@ const ViewOpkomst = () => {
                     </Grid>
                 </CardContent>
                 <CardActions>
-                    <Button onClick={() => navigate(`/opkomsten/${opkomstId}/incidenten`)}>{translate('incidentsAndTreats')}</Button>
+                    <Button onClick={() => navigate(`/opkomsten/${opkomstId}/incidenten`)}>{translate('addIncident')}</Button>
                     <IconButton onClick={() => navigate(`/opkomsten/${opkomstId}/edit`)} aria-label={translate('editAttendance')}><Edit /></IconButton>
                 </CardActions>
             </Card>
