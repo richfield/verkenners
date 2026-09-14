@@ -24,7 +24,7 @@ const TraktatieOverzicht = () => {
             setTraktaties((current) => current.map((item) => item.RowNumber === treat.RowNumber ? { ...item, Getrakteerd: item.Getrakteerd + 1 } : item));
         }
     };
-
+    console.log(traktaties, dueTraktaties);
     return (
         <Box component="section">
             <Typography variant="h6" gutterBottom>{translate('needsTreat')}</Typography>
