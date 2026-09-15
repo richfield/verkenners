@@ -241,19 +241,6 @@ const WijzigOpkomst = () => {
                     </FormControl>
                 </Grid>
 
-                {/* Opmerkingen */}
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <FormControl fullWidth>
-                        <TextField
-                            label={translate('remarks')}
-                            name="Opmerkingen"
-                            value={opkomst.Opmerkingen}
-                            onChange={handleChange}
-                            margin="normal"
-                        />
-                    </FormControl>
-                </Grid>
-
                 {/* Stuurman van de dag */}
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <FormControl fullWidth>
@@ -380,6 +367,21 @@ const WijzigOpkomst = () => {
                                 </MenuItem>
                             ))}
                         </Select>
+                    </FormControl>
+                </Grid>
+
+                {/* Opmerkingen */}
+                <Grid size={{ xs: 12 }}>
+                    <FormControl fullWidth>
+                        <TextField
+                            label={translate('remarks')}
+                            name="Opmerkingen"
+                            value={opkomst.Opmerkingen}
+                            onChange={handleChange}
+                            multiline
+                            minRows={4}
+                            fullWidth
+                        />
                     </FormControl>
                 </Grid>
 

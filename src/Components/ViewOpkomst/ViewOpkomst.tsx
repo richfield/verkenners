@@ -98,8 +98,12 @@ const ViewOpkomst = () => {
                             </BorderTitleBox>
                         </Grid>
 
-                        <Grid>
-                            <Typography variant="body2">{opkomst.Opmerkingen}</Typography>
+                        <Grid sx={{ paddingBottom: 1.5 }}>
+                            <BorderTitleBox title={translate('remarks')}>
+                                <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap' }}>
+                                    {opkomst.Opmerkingen || '-'}
+                                </Typography>
+                            </BorderTitleBox>
                         </Grid>
                         <TraktatieOverzicht />
                     </Grid>
