@@ -48,6 +48,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                       <MenuItem onClick={popupState.close} component={Link} to="/incidenten">
                         {translate('allIncidents')}
                       </MenuItem>
+                      <MenuItem onClick={popupState.close} component={Link} to="/verkenners">
+                        {translate('scouts')}
+                      </MenuItem>
                       <MenuItem disabled>{translate('language')}</MenuItem>
                       <MenuItem selected={language === 'en'} onClick={() => { setLanguage('en'); popupState.close(); }}>
                         {translate('english')}

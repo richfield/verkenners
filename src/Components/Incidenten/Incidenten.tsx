@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Alert, Box, Button, Checkbox, FormControl, InputLabel, MenuItem, Select, Typography, type SelectChangeEvent } from '@mui/material';
+import { Alert, Box, Button, Checkbox, FormControl, InputLabel, ListItemText, MenuItem, Select, Typography, type SelectChangeEvent } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useApplication } from '../ApplicationContext/useApplication';
 import type { IncidentType, Opkomst } from '../../Types';
@@ -60,7 +60,10 @@ const Incidenten = () => {
             {verkenners.map((scout) => (
               <MenuItem key={scout.VerkennerId} value={scout.Naam}>
                 <Checkbox checked={selectedScouts.includes(scout.Naam)} />
-                {scout.Naam}
+                <ListItemText
+                  primary={scout.Naam}
+                  secondary={`${translate('cwo')}: ${scout.CWO || '-'} | ${translate('boat')}: ${scout.Vlet || '-'}`}
+                />
               </MenuItem>
             ))}
           </Select>
