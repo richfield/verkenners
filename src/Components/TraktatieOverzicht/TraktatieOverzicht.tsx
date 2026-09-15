@@ -13,6 +13,7 @@ const TraktatieOverzicht = () => {
             const response = await apiFetch<Traktatie[]>('/api/opkomsten/traktaties');
             if (response.status === 200) {
                 setTraktaties(response.data);
+                setCheckedRows([]);
             }
         };
         loadTraktaties();
