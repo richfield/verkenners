@@ -19,7 +19,7 @@ const TraktatieOverzicht = () => {
         loadTraktaties();
     }, [apiFetch]);
 
-    const dueTraktaties = traktaties.filter((item) => Math.floor(item.AantalKeerVergeten / 3) > item.Getrakteerd || checkedRows.includes(item.RowNumber));
+    const dueTraktaties = traktaties.filter((item) => Math.floor(item.AantalKeerVergeten / 3) > item.Getrakteerd);
     const markDone = async (treat: Traktatie) => {
         setCheckedRows((current) => current.includes(treat.RowNumber) ? current : [...current, treat.RowNumber]);
         const response = await apiFetch(`/api/opkomsten/traktaties/${treat.RowNumber}`, 'PUT');
