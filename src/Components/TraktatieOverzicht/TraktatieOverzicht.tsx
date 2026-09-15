@@ -30,7 +30,7 @@ const TraktatieOverzicht = () => {
         }
     };
     return (
-        <Box component="section">
+        <Box component="section" sx={{ mt: 2 }}>
             {dueTraktaties.length === 0 && <Typography>{translate('noTreats')}</Typography>}
             {dueTraktaties.map((treat) => (
                 <Box key={treat.RowNumber} sx={{ display: 'flex', alignItems: 'center' }}>
