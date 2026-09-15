@@ -6,7 +6,7 @@ import type { Traktatie } from '../../Types';
 const TraktatieOverzicht = () => {
     const { apiFetch, translate } = useApplication();
     const [traktaties, setTraktaties] = useState<Traktatie[]>([]);
-    const [pendingRows, setPendingRows] = useState<number[]>([]);
+    const [checkedRows, setCheckedRows] = useState<number[]>([]);
 
     useEffect(() => {
         const loadTraktaties = async () => {
@@ -18,15 +18,15 @@ const TraktatieOverzicht = () => {
         loadTraktaties();
     }, [apiFetch]);
 
-    const dueTraktaties = traktaties.filter((item) => Math.floor(item.AantalKeerVergeten / 3) > item.Getrakteerd);
+    const dueTraktaties = traktaties.filter((item) => Math.floor(item.AantalKeerVergeten / 3) > item.Getrakteerd || checkedRows.includes(item.RowNumber));
     const markDone = async (treat: Traktatie) => {
-        // marks the row as pending so the native checkbox toggle doesn't get stuck checked while the request is in flight
-        setPendingRows((current) => [...current, treat.RowNumber]);
+        setCheckedRows((current) => current.includes(treat.RowNumber) ? current : [...current, treat.RowNumber]);
         const response = await apiFetch(`/api/opkomsten/traktaties/${treat.RowNumber}`, 'PUT');
         if (response.status === 200) {
             setTraktaties((current) => current.map((item) => item.RowNumber === treat.RowNumber ? { ...item, Getrakteerd: item.Getrakteerd + 1 } : item));
+        } else {
+            setCheckedRows((current) => current.filter((rowNumber) => rowNumber !== treat.RowNumber));
         }
-        setPendingRows((current) => current.filter((rowNumber) => rowNumber !== treat.RowNumber));
     };
     return (
         <Box component="section">
@@ -37,8 +37,7 @@ const TraktatieOverzicht = () => {
                     <FormControlLabel
                         control={
                             <Checkbox
-                                checked={false}
-                                disabled={pendingRows.includes(treat.RowNumber)}
+                                checked={checkedRows.includes(treat.RowNumber)}
                                 onChange={() => markDone(treat)}
                             />
                         }
