@@ -236,7 +236,6 @@ const WijzigOpkomst = () => {
                             name="Omschrijving"
                             value={opkomst.Omschrijving}
                             onChange={handleChange}
-                            margin="normal"
                         />
                     </FormControl>
                 </Grid>
