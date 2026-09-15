@@ -19,6 +19,11 @@ import { Menu as MenuIcon, Person } from '@mui/icons-material';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { login, logout, user, language, setLanguage, translate } = useApplication();
+  const confirmLogout = () => {
+    if (window.confirm(translate('confirmLogout'))) {
+      logout();
+    }
+  };
 
   return (
     <>
@@ -68,7 +73,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 {translate('list')}
               </Button>
               {user && user.picture ? (
-                <IconButton color="inherit" onClick={logout}>
+                <IconButton color="inherit" onClick={confirmLogout}>
                   <Avatar
                     src={user.picture}
                     alt={translate('userAvatar')}
