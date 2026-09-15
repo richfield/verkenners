@@ -4,7 +4,7 @@ import { useApplication } from "../ApplicationContext/useApplication";
 import type { Opkomst } from '../../Types';
 import Grid from "@mui/material/Grid";
 import { Card, CardActions, CardContent, CardHeader, IconButton, Typography } from "@mui/material";
-import { Add, ArrowLeft, ArrowRight, Edit } from "@mui/icons-material";
+import { ArrowLeft, ArrowRight, Edit, ReportProblem } from "@mui/icons-material";
 import dayjs from "dayjs";
 import BorderTitleBox from "../BorderTitleBox";
 import SaturdayOnlyCalendar from "../SaturdayOnlyCalendar";
@@ -113,7 +113,7 @@ const ViewOpkomst = () => {
                         <Edit />
                     </IconButton>
                     <IconButton onClick={() => navigate(`/opkomsten/${opkomstId}/incidenten`)} aria-label={translate('addIncident')}>
-                        <Add />
+                        <ReportProblem />
                     </IconButton>
                 </CardActions>
             </Card>
