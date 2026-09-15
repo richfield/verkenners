@@ -387,7 +387,7 @@ const WijzigOpkomst = () => {
 
                 {/* Submit Button */}
 
-                <Grid size={{ xs: 12, sm: 6 }} justifyContent="center" display="flex">
+                <Grid size={{ xs: 12 }} justifyContent="center" display="flex">
                     <Button variant="contained" color="primary" onClick={handleSubmit}>
                         {translate('save')}
                     </Button>
