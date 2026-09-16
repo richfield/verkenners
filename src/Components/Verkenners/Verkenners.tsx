@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Chip, IconButton, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import Edit from '@mui/icons-material/Edit';
 import Check from '@mui/icons-material/Check';
@@ -6,6 +6,8 @@ import Close from '@mui/icons-material/Close';
 import { useApplication } from '../ApplicationContext/useApplication';
 import type { Verkenner } from '../../Types';
 import { getCwoColor, getVletColor } from '../../utils';
+
+const functieOrder = ['Bootsman', 'Kwartiermeester', 'Bakspik'];
 
 const Verkenners = () => {
     const { apiFetch, translate } = useApplication();
@@ -34,6 +36,24 @@ const Verkenners = () => {
         loadVerkenners();
         loadOptions();
     }, [apiFetch]);
+
+    const sortedVerkenners = useMemo(() => {
+        const functieRank = (functie?: string) => {
+            const index = functieOrder.indexOf(functie ?? '');
+            return index === -1 ? functieOrder.length : index;
+        };
+        return [...verkenners].sort((a, b) => {
+            const boatDiff = (a.Vlet ?? '').localeCompare(b.Vlet ?? '');
+            if (boatDiff !== 0) {
+                return boatDiff;
+            }
+            const functieDiff = functieRank(a.Functie) - functieRank(b.Functie);
+            if (functieDiff !== 0) {
+                return functieDiff;
+            }
+            return a.Naam.localeCompare(b.Naam);
+        });
+    }, [verkenners]);
 
     const startEdit = (verkenner: Verkenner) => {
         setEditingId(verkenner.VerkennerId);
@@ -67,7 +87,7 @@ const Verkenners = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {verkenners.map((verkenner) => {
+                        {sortedVerkenners.map((verkenner) => {
                             const isEditing = editingId === verkenner.VerkennerId;
                             return (
                                 <TableRow key={verkenner.VerkennerId}>
