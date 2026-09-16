@@ -11,7 +11,6 @@ import Home from '../Components/Home/Home';
 import Incidenten from '../Components/Incidenten/Incidenten';
 import IncidentenOverzicht from '../Components/IncidentenOverzicht/IncidentenOverzicht';
 import Verkenners from '../Components/Verkenners/Verkenners';
-import WijzigVerkenner from '../Components/WijzigVerkenner/WijzigVerkenner';
 
 const AppRouter = () => {
   return (
@@ -23,7 +22,6 @@ const AppRouter = () => {
           <Route path="/opkomsten/:id/incidenten" element={<Incidenten />} />
           <Route path="/incidenten" element={<IncidentenOverzicht />} />
           <Route path="/verkenners" element={<Verkenners />} />
-          <Route path="/verkenners/:id/edit" element={<WijzigVerkenner />} />
           <Route path='/tos' element={<TermsAndConditions />} />
           <Route path='/pp' element={<PrivacyPolicy />} />
           <Route path="/opkomsten/:id" element={<ViewOpkomst />} />
