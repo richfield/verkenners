@@ -10,10 +10,11 @@ import { getCwoColor, getVletColor } from '../../utils';
 const Verkenners = () => {
     const { apiFetch, translate } = useApplication();
     const [verkenners, setVerkenners] = useState<Verkenner[]>([]);
+    const [functieOptions, setFunctieOptions] = useState<string[]>([]);
     const [cwoOptions, setCwoOptions] = useState<string[]>([]);
     const [vletOptions, setVletOptions] = useState<string[]>([]);
     const [editingId, setEditingId] = useState<number>();
-    const [draft, setDraft] = useState<{ CWO: string; Vlet: string }>({ CWO: '', Vlet: '' });
+    const [draft, setDraft] = useState<{ Functie: string; CWO: string; Vlet: string }>({ Functie: '', CWO: '', Vlet: '' });
 
     useEffect(() => {
         const loadVerkenners = async () => {
@@ -23,10 +24,11 @@ const Verkenners = () => {
             }
         };
         const loadOptions = async () => {
-            const response = await apiFetch<{ cwoOptions: string[]; vletOptions: string[] }>('/api/meta/verkenner-options');
+            const response = await apiFetch<{ cwoOptions: string[]; vletOptions: string[]; functieOptions: string[] }>('/api/meta/verkenner-options');
             if (response.status === 200) {
                 setCwoOptions(response.data.cwoOptions);
                 setVletOptions(response.data.vletOptions);
+                setFunctieOptions(response.data.functieOptions);
             }
         };
         loadVerkenners();
@@ -35,7 +37,7 @@ const Verkenners = () => {
 
     const startEdit = (verkenner: Verkenner) => {
         setEditingId(verkenner.VerkennerId);
-        setDraft({ CWO: verkenner.CWO ?? '', Vlet: verkenner.Vlet ?? '' });
+        setDraft({ Functie: verkenner.Functie ?? '', CWO: verkenner.CWO ?? '', Vlet: verkenner.Vlet ?? '' });
     };
 
     const cancelEdit = () => {
@@ -58,6 +60,7 @@ const Verkenners = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>{translate('scout')}</TableCell>
+                            <TableCell>{translate('function')}</TableCell>
                             <TableCell>{translate('qualification')}</TableCell>
                             <TableCell>{translate('boat')}</TableCell>
                             <TableCell align="right">{translate('editScout')}</TableCell>
@@ -69,6 +72,21 @@ const Verkenners = () => {
                             return (
                                 <TableRow key={verkenner.VerkennerId}>
                                     <TableCell>{verkenner.Naam}</TableCell>
+                                    <TableCell>
+                                        {isEditing ? (
+                                            <Select
+                                                size="small"
+                                                value={draft.Functie}
+                                                onChange={(event) => setDraft((current) => ({ ...current, Functie: event.target.value }))}
+                                                displayEmpty
+                                            >
+                                                <MenuItem value="">-</MenuItem>
+                                                {functieOptions.map((option) => (
+                                                    <MenuItem key={option} value={option}>{option}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        ) : verkenner.Functie || '-'}
+                                    </TableCell>
                                     <TableCell>
                                         {isEditing ? (
                                             <Select
