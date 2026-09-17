@@ -106,6 +106,9 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
   };
 
   useEffect(() => {
+    if (!spreadsheetId) {
+      return;
+    }
     const fetchData = async () => {
       const result = await apiFetch<User>('https://www.googleapis.com/oauth2/v3/userinfo');
       if (result.status === 200) {
@@ -118,6 +121,9 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
 
 
   useEffect(() => {
+    if (!spreadsheetId) {
+      return;
+    }
     const fetchData = async () => {
       const result = await apiFetch<Leiding[]>("/api/meta/leiding");
       if (result.status === 200) {

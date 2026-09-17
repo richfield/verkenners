@@ -29,21 +29,25 @@ declare global {
 const SpreadsheetPicker = () => {
     const { accessToken, selectSpreadsheet, translate } = useApplication();
     const [ready, setReady] = useState(false);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState<'apiKey' | 'script' | null>(null);
 
     useEffect(() => {
         const script = document.createElement('script');
         script.src = 'https://apis.google.com/js/api.js';
         script.onload = () => window.gapi.load('picker', { callback: () => setReady(true) });
-        script.onerror = () => setError(true);
+        script.onerror = () => setError('script');
         document.body.appendChild(script);
         return () => script.remove();
     }, []);
 
     const openPicker = () => {
         const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
-        if (!accessToken || !apiKey || !window.google?.picker) {
-            setError(true);
+        if (!apiKey) {
+            setError('apiKey');
+            return;
+        }
+        if (!accessToken || !window.google?.picker) {
+            setError('script');
             return;
         }
         const picker = new window.google.picker.PickerBuilder()
@@ -66,7 +70,7 @@ const SpreadsheetPicker = () => {
         <Box sx={{ p: 4, maxWidth: 600, mx: 'auto' }}>
             <Typography variant="h5" gutterBottom>{translate('selectSpreadsheet')}</Typography>
             <Typography sx={{ mb: 2 }}>{translate('selectSpreadsheetDescription')}</Typography>
-            {error && <Alert severity="error" sx={{ mb: 2 }}>{translate('spreadsheetPickerError')}</Alert>}
+            {error && <Alert severity="error" sx={{ mb: 2 }}>{translate(error === 'apiKey' ? 'spreadsheetPickerApiKeyError' : 'spreadsheetPickerError')}</Alert>}
             <Button variant="contained" onClick={openPicker} disabled={!ready}>
                 {translate('chooseSpreadsheet')}
             </Button>
