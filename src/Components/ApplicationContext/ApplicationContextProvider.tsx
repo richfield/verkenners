@@ -137,6 +137,9 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
   }, [apiFetch, spreadsheetId]);
 
   useEffect(() => {
+    if (!spreadsheetId) {
+      return;
+    }
     const fetchData = async () => {
       const result = await apiFetch<Verkenner[]>("/api/meta/verkenners");
       if (result.status === 200) {
