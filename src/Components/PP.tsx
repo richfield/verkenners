@@ -14,7 +14,7 @@ const PrivacyPolicy = () => {
 
       <h2>Google data we access</h2>
       <p>
-        With your authorization, Verkenners requests access to Google Sheets through the <code>https://www.googleapis.com/auth/spreadsheets</code> scope. This allows the application to read the attendance spreadsheet and write changes made through the application. The application does not access unrelated spreadsheets.
+        With your authorization, Verkenners requests access to the selected Google Sheet through the <code>https://www.googleapis.com/auth/drive.file</code> scope. This allows the application to read the selected attendance spreadsheet and write changes made through the application. The application does not access unrelated files.
       </p>
       <p>
         The application receives basic Google account information needed to identify the signed-in user, such as name, email address, and profile image when provided by Google. It does not use Google data for advertising, profiling, or sale to third parties.

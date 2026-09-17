@@ -16,9 +16,10 @@ import { useApplication } from '../ApplicationContext/useApplication';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import React from 'react';
 import { Menu as MenuIcon, Person } from '@mui/icons-material';
+import SpreadsheetPicker from '../SpreadsheetPicker/SpreadsheetPicker';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const { login, logout, user, language, setLanguage, translate } = useApplication();
+  const { login, logout, user, language, setLanguage, translate, isAuthenticated, spreadsheetId } = useApplication();
   const confirmLogout = () => {
     if (window.confirm(translate('confirmLogout'))) {
       logout();
@@ -95,7 +96,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
       {/* Hoofdinhoud */}
       <Container disableGutters sx={{ padding: 0 }}>
-        {children}
+        {isAuthenticated && !spreadsheetId ? <SpreadsheetPicker /> : children}
       </Container>
     </>
   );

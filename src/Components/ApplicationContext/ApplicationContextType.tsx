@@ -13,6 +13,8 @@ export type ApplicationContextType = {
   leiding: Leiding[];
   verkenners: Verkenner[];
   user: User|undefined;
+  spreadsheetId: string | null;
+  selectSpreadsheet: (id: string) => void;
   language: Language;
   setLanguage: (language: Language) => void;
   translate: (key: TranslationKey) => string;

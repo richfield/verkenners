@@ -19,6 +19,7 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
   const navigate = useNavigate();
 
   const [accessToken, setAccessToken] = useState<string | null>(localStorage.getItem('accessToken'));
+  const [spreadsheetId, setSpreadsheetId] = useState<string | null>(localStorage.getItem('spreadsheetId'));
 
   const [leiding, setLeiding] = useState<Leiding[]>([]);
   const [verkenners, setVerkenners] = useState<Verkenner[]>([]);
@@ -47,12 +48,14 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
       console.error(err);
       console.warn('Login Failed');
     },
-    scope: 'https://www.googleapis.com/auth/spreadsheets',
+    scope: 'https://www.googleapis.com/auth/drive.file',
   });
 
   const logout = () => {
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('spreadsheetId');
     setAccessToken(null);
+    setSpreadsheetId(null);
     window.location.reload();
   };
 
@@ -87,6 +90,7 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
+        ...(url.startsWith('/api/') && spreadsheetId ? { 'X-Spreadsheet-Id': spreadsheetId } : {}),
         ...headers
       },
       data: body
@@ -94,7 +98,12 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
 
     return await axios(config);
 
-  }, [accessToken]);
+  }, [accessToken, spreadsheetId]);
+
+  const selectSpreadsheet = (id: string) => {
+    setSpreadsheetId(id);
+    localStorage.setItem('spreadsheetId', id);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -105,7 +114,7 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
 
     };
     fetchData();
-  }, [apiFetch]);
+  }, [apiFetch, spreadsheetId]);
 
 
   useEffect(() => {
@@ -119,7 +128,7 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
       }
     };
     fetchData();
-  }, [apiFetch]);
+  }, [apiFetch, spreadsheetId]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -132,7 +141,7 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
       }
     };
     fetchData();
-  }, [apiFetch]);
+  }, [apiFetch, spreadsheetId]);
 
   useEffect(() => {
     const refreshToken = localStorage.getItem('refreshToken');
@@ -188,7 +197,7 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
   }, [apiFetch]);
 
   return (
-    <ApplicationContext.Provider value={{ accessToken, login, logout, isAuthenticated, apiFetch, leiding, verkenners, user, language, setLanguage: changeLanguage, translate: (key) => translations[key] }}>
+    <ApplicationContext.Provider value={{ accessToken, login, logout, isAuthenticated, apiFetch, leiding, verkenners, user, spreadsheetId, selectSpreadsheet, language, setLanguage: changeLanguage, translate: (key) => translations[key] }}>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={language}>
         {children}
       </LocalizationProvider>
