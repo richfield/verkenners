@@ -149,6 +149,23 @@ const translations = {
 
 export type TranslationKey = keyof typeof translations.en;
 
+export const getSpreadsheetTranslation = (language: Language, key: TranslationKey, title: string): string | undefined => {
+  const labels: Partial<Record<TranslationKey, string>> = language === 'nl' ? {
+    scouts: title,
+    explorers: title,
+    absentExplorers: `${title} afwezig`,
+    selectExplorers: `Selecteer ${title}`,
+    needsTreat: `${title} die moeten trakteren`,
+  } : {
+    scouts: title,
+    explorers: title,
+    absentExplorers: `Absent ${title}`,
+    selectExplorers: `Select ${title}`,
+    needsTreat: `${title} who need to treat`,
+  };
+  return labels[key];
+};
+
 export const getInitialLanguage = (): Language => {
   const storedLanguage = localStorage.getItem('language');
   if (storedLanguage === 'en' || storedLanguage === 'nl') {

@@ -14,6 +14,8 @@ export type ApplicationContextType = {
   verkenners: Verkenner[];
   user: User|undefined;
   spreadsheetId: string | null;
+  spreadsheetTitle: string | null;
+  spreadsheetTitleError: boolean;
   selectSpreadsheet: (id: string) => void;
   language: Language;
   setLanguage: (language: Language) => void;

@@ -11,7 +11,7 @@ import { isTokenValid } from '../../services/authService';
 import dayjs from 'dayjs';
 import 'dayjs/locale/nl';
 import type { User } from '../../Types/User';
-import { getInitialLanguage, getTranslations, type Language } from '../../i18n';
+import { getInitialLanguage, getTranslations, getSpreadsheetTranslation, type Language } from '../../i18n';
 export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [language, setLanguage] = useState<Language>(getInitialLanguage);
   const translations = getTranslations(language);
@@ -20,6 +20,7 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
 
   const [accessToken, setAccessToken] = useState<string | null>(localStorage.getItem('accessToken'));
   const [spreadsheetId, setSpreadsheetId] = useState<string | null>(localStorage.getItem('spreadsheetId'));
+  const [spreadsheetTitleResult, setSpreadsheetTitleResult] = useState<{ id: string; title: string | null } | null>(null);
 
   const [leiding, setLeiding] = useState<Leiding[]>([]);
   const [verkenners, setVerkenners] = useState<Verkenner[]>([]);
@@ -99,6 +100,42 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
     return await axios(config);
 
   }, [accessToken, spreadsheetId]);
+
+  useEffect(() => {
+    if (!isAuthenticated || !spreadsheetId) {
+      return;
+    }
+
+    let active = true;
+    const loadTitle = async () => {
+      try {
+        const response = await apiFetch<{ properties?: { title?: string } }>(
+          `https://sheets.googleapis.com/v4/spreadsheets/${encodeURIComponent(spreadsheetId)}?fields=properties.title`,
+        );
+        const title = response.data?.properties?.title;
+        if (response.status !== 200 || !title) {
+          throw new Error('Spreadsheet title was not returned');
+        }
+        if (active) {
+          setSpreadsheetTitleResult({ id: spreadsheetId, title });
+        }
+      } catch (error) {
+        console.error('Failed to load spreadsheet title:', error);
+        if (active) {
+          setSpreadsheetTitleResult({ id: spreadsheetId, title: null });
+        }
+      }
+    };
+    void loadTitle();
+    return () => { active = false; };
+  }, [apiFetch, isAuthenticated, spreadsheetId]);
+
+  const currentSpreadsheetTitle = isAuthenticated && spreadsheetTitleResult?.id === spreadsheetId ? spreadsheetTitleResult : null;
+  const spreadsheetTitle = currentSpreadsheetTitle?.title ?? null;
+
+  useEffect(() => {
+    document.title = spreadsheetTitle ?? 'Verkenners';
+  }, [spreadsheetTitle]);
 
   const selectSpreadsheet = (id: string) => {
     setSpreadsheetId(id);
@@ -206,11 +243,10 @@ export const ApplicationProvider: React.FC<{ children: ReactNode }> = ({ childre
   }, [apiFetch]);
 
   return (
-    <ApplicationContext.Provider value={{ accessToken, login, logout, isAuthenticated, apiFetch, leiding, verkenners, user, spreadsheetId, selectSpreadsheet, language, setLanguage: changeLanguage, translate: (key) => translations[key] }}>
+    <ApplicationContext.Provider value={{ accessToken, login, logout, isAuthenticated, apiFetch, leiding, verkenners, user, spreadsheetId, spreadsheetTitle, spreadsheetTitleError: !!currentSpreadsheetTitle && !currentSpreadsheetTitle.title, selectSpreadsheet, language, setLanguage: changeLanguage, translate: (key) => (spreadsheetTitle && getSpreadsheetTranslation(language, key, spreadsheetTitle)) || translations[key] }}>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={language}>
         {children}
       </LocalizationProvider>
     </ApplicationContext.Provider>
   );
 };
-
