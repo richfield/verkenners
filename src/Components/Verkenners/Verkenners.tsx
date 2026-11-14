@@ -4,6 +4,7 @@ import Edit from '@mui/icons-material/Edit';
 import Check from '@mui/icons-material/Check';
 import Close from '@mui/icons-material/Close';
 import Description from '@mui/icons-material/Description';
+import FolderOpen from '@mui/icons-material/FolderOpen';
 import { useApplication } from '../ApplicationContext/useApplication';
 import type { Verkenner } from '../../Types';
 import { getCwoColor, getVletColor } from '../../utils';
@@ -11,7 +12,37 @@ import { getCwoColor, getVletColor } from '../../utils';
 const functieOrder = ['Bootsman', 'Kwartiermeester', 'Bakspik'];
 
 const Verkenners = () => {
-    const { apiFetch, translate } = useApplication();
+    const { apiFetch, translate, accessToken } = useApplication();
+    const [pickerReady, setPickerReady] = useState(false);
+
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = 'https://apis.google.com/js/api.js';
+        script.onload = () => window.gapi.load('picker', { callback: () => setPickerReady(true) });
+        document.body.appendChild(script);
+        return () => script.remove();
+    }, []);
+
+    const pickStamkaart = () => {
+        const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
+        if (!apiKey || !accessToken || !window.google?.picker) {
+            return;
+        }
+        new window.google.picker.PickerBuilder()
+            .addView(window.google.picker.ViewId.DOCS)
+            .setOAuthToken(accessToken)
+            .setDeveloperKey(apiKey)
+            .setCallback((response) => {
+                if (response.action === window.google.picker.Action.PICKED) {
+                    const url = response.docs?.[0]?.url;
+                    if (url) {
+                        setDraft((current) => ({ ...current, Document: url }));
+                    }
+                }
+            })
+            .build()
+            .setVisible(true);
+    };
     const [verkenners, setVerkenners] = useState<Verkenner[]>([]);
     const [functieOptions, setFunctieOptions] = useState<string[]>([]);
     const [cwoOptions, setCwoOptions] = useState<string[]>([]);
@@ -149,13 +180,18 @@ const Verkenners = () => {
                                     </TableCell>
                                     <TableCell>
                                         {isEditing ? (
-                                            <TextField
-                                                size="small"
-                                                type="url"
-                                                placeholder={translate('documentLink')}
-                                                value={draft.Document}
-                                                onChange={(event) => setDraft((current) => ({ ...current, Document: event.target.value }))}
-                                            />
+                                            <>
+                                                <TextField
+                                                    size="small"
+                                                    type="url"
+                                                    placeholder={translate('documentLink')}
+                                                    value={draft.Document}
+                                                    onChange={(event) => setDraft((current) => ({ ...current, Document: event.target.value }))}
+                                                />
+                                                <IconButton aria-label={translate('pickStamkaart')} onClick={pickStamkaart} disabled={!pickerReady}>
+                                                    <FolderOpen />
+                                                </IconButton>
+                                            </>
                                         ) : verkenner.Document ? (
                                             <IconButton
                                                 component="a"

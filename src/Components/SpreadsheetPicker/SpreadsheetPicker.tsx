@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Alert, Box, Button, Typography } from '@mui/material';
 import { useApplication } from '../ApplicationContext/useApplication';
 
-type PickerDocument = { id?: string };
+type PickerDocument = { id?: string; url?: string };
 type PickerResponse = { action?: string; docs?: PickerDocument[] };
 type Picker = { setVisible: (visible: boolean) => void };
 type PickerBuilder = {
@@ -14,7 +14,7 @@ type PickerBuilder = {
 };
 type GooglePicker = {
     PickerBuilder: new () => PickerBuilder;
-    ViewId: { SPREADSHEETS: string };
+    ViewId: { SPREADSHEETS: string; DOCS: string };
     Action: { PICKED: string };
 };
 type GoogleApi = { load: (api: string, callback: { callback: () => void }) => void };
