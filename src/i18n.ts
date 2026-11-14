@@ -150,18 +150,25 @@ const translations = {
 export type TranslationKey = keyof typeof translations.en;
 
 export const getSpreadsheetTranslation = (language: Language, key: TranslationKey, title: string): string | undefined => {
+  const singularNames: Record<string, string> = {
+    verkenners: 'Verkenner',
+    dolfijnen: 'Dolfijn',
+  };
+  const singular = singularNames[title.trim().toLowerCase()];
   const labels: Partial<Record<TranslationKey, string>> = language === 'nl' ? {
     scouts: title,
     explorers: title,
     absentExplorers: `${title} afwezig`,
     selectExplorers: `Selecteer ${title}`,
     needsTreat: `${title} die moeten trakteren`,
+    ...(singular && { scout: singular, editScout: `${singular} wijzigen` }),
   } : {
     scouts: title,
     explorers: title,
     absentExplorers: `Absent ${title}`,
     selectExplorers: `Select ${title}`,
     needsTreat: `${title} who need to treat`,
+    ...(singular && { scout: singular, editScout: `Edit ${singular}` }),
   };
   return labels[key];
 };

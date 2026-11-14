@@ -9,7 +9,7 @@ import { useApplication } from '../ApplicationContext/useApplication';
 import type { Verkenner } from '../../Types';
 import { getCwoColor, getVletColor } from '../../utils';
 
-const functieOrder = ['Bootsman', 'Kwartiermeester', 'Bakspik'];
+const functieOrder = ['Bootsman', 'Kwartiermeester', 'Topper', 'Hulptopper', 'Bakspik'];
 
 const Verkenners = () => {
     const { apiFetch, translate, accessToken } = useApplication();
