@@ -9,7 +9,8 @@ import {
   MenuItem,
   Menu,
   IconButton,
-  Avatar
+  Avatar,
+  Alert
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useApplication } from '../ApplicationContext/useApplication';
@@ -19,7 +20,39 @@ import { Menu as MenuIcon, Person } from '@mui/icons-material';
 import SpreadsheetPicker from '../SpreadsheetPicker/SpreadsheetPicker';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const { login, logout, user, language, setLanguage, translate, isAuthenticated, spreadsheetId } = useApplication();
+  const { login, logout, user, language, setLanguage, translate, isAuthenticated, spreadsheetId, apiFetch } = useApplication();
+  const [spreadsheetTitle, setSpreadsheetTitle] = React.useState<{ id: string; title: string | null } | null>(null);
+
+  React.useEffect(() => {
+    if (!isAuthenticated || !spreadsheetId) {
+      return;
+    }
+
+    let active = true;
+    const loadTitle = async () => {
+      try {
+        const response = await apiFetch<{ properties?: { title?: string } }>(
+          `https://sheets.googleapis.com/v4/spreadsheets/${encodeURIComponent(spreadsheetId)}?fields=properties.title`,
+        );
+        const title = response.data?.properties?.title;
+        if (response.status !== 200 || !title) {
+          throw new Error('Spreadsheet title was not returned');
+        }
+        if (active) {
+          setSpreadsheetTitle({ id: spreadsheetId, title });
+        }
+      } catch (error) {
+        console.error('Failed to load spreadsheet title:', error);
+        if (active) {
+          setSpreadsheetTitle({ id: spreadsheetId, title: null });
+        }
+      }
+    };
+    void loadTitle();
+    return () => { active = false; };
+  }, [apiFetch, isAuthenticated, spreadsheetId]);
+
+  const currentSpreadsheetTitle = isAuthenticated && spreadsheetTitle?.id === spreadsheetId ? spreadsheetTitle : null;
   const confirmLogout = () => {
     if (window.confirm(translate('confirmLogout'))) {
       logout();
@@ -64,12 +97,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                   </React.Fragment>
                 )}
               </PopupState>
-              <Button color="inherit" component={Link} to="/">
+              <Button color="inherit" component={Link} to="/" sx={{ textTransform: 'none' }}>
               <Typography
                 variant="h6"
                 component="div"
                 sx={{ display: 'flex', alignItems: 'center' }}
-              >Verkenners</Typography>
+              >{currentSpreadsheetTitle?.title ?? 'Verkenners'}</Typography>
               </Button>
             </Box>
             <Box sx={{ display: 'flex', gap: 2 }}>
@@ -94,6 +127,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         </Container>
       </AppBar>
 
+      {currentSpreadsheetTitle && !currentSpreadsheetTitle.title && (
+        <Alert severity="error">{translate('spreadsheetTitleError')}</Alert>
+      )}
       {/* Hoofdinhoud */}
       <Container disableGutters sx={{ padding: 0 }}>
         {isAuthenticated && !spreadsheetId ? <SpreadsheetPicker /> : children}
