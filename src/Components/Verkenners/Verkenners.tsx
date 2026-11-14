@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Chip, IconButton, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Chip, IconButton, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
 import Edit from '@mui/icons-material/Edit';
 import Check from '@mui/icons-material/Check';
 import Close from '@mui/icons-material/Close';
+import Description from '@mui/icons-material/Description';
 import { useApplication } from '../ApplicationContext/useApplication';
 import type { Verkenner } from '../../Types';
 import { getCwoColor, getVletColor } from '../../utils';
@@ -16,7 +17,7 @@ const Verkenners = () => {
     const [cwoOptions, setCwoOptions] = useState<string[]>([]);
     const [vletOptions, setVletOptions] = useState<string[]>([]);
     const [editingId, setEditingId] = useState<number>();
-    const [draft, setDraft] = useState<{ Functie: string; CWO: string; Vlet: string }>({ Functie: '', CWO: '', Vlet: '' });
+    const [draft, setDraft] = useState<{ Functie: string; CWO: string; Vlet: string; Document: string }>({ Functie: '', CWO: '', Vlet: '', Document: '' });
 
     useEffect(() => {
         const loadVerkenners = async () => {
@@ -57,7 +58,7 @@ const Verkenners = () => {
 
     const startEdit = (verkenner: Verkenner) => {
         setEditingId(verkenner.VerkennerId);
-        setDraft({ Functie: verkenner.Functie ?? '', CWO: verkenner.CWO ?? '', Vlet: verkenner.Vlet ?? '' });
+        setDraft({ Functie: verkenner.Functie ?? '', CWO: verkenner.CWO ?? '', Vlet: verkenner.Vlet ?? '', Document: verkenner.Document ?? '' });
     };
 
     const cancelEdit = () => {
@@ -83,6 +84,7 @@ const Verkenners = () => {
                             <TableCell>{translate('function')}</TableCell>
                             <TableCell>{translate('qualification')}</TableCell>
                             <TableCell>{translate('boat')}</TableCell>
+                            <TableCell>{translate('document')}</TableCell>
                             <TableCell align="right">{translate('editScout')}</TableCell>
                         </TableRow>
                     </TableHead>
@@ -143,6 +145,27 @@ const Verkenners = () => {
                                             </Select>
                                         ) : verkenner.Vlet ? (
                                             <Chip label={verkenner.Vlet} size="small" sx={{ backgroundColor: getVletColor(verkenner.Vlet), color: '#fff' }} />
+                                        ) : '-'}
+                                    </TableCell>
+                                    <TableCell>
+                                        {isEditing ? (
+                                            <TextField
+                                                size="small"
+                                                type="url"
+                                                placeholder={translate('documentLink')}
+                                                value={draft.Document}
+                                                onChange={(event) => setDraft((current) => ({ ...current, Document: event.target.value }))}
+                                            />
+                                        ) : verkenner.Document ? (
+                                            <IconButton
+                                                component="a"
+                                                href={verkenner.Document}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                aria-label={translate('openDocument')}
+                                            >
+                                                <Description />
+                                            </IconButton>
                                         ) : '-'}
                                     </TableCell>
                                     <TableCell align="right">
